@@ -1,0 +1,112 @@
+/* Container for the entire form */
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: #f9f9f9;
+}
+
+/* Style for the logo section */
+.logo img {
+  max-width: 100px;
+  display: block;
+  margin: 0 auto;
+}
+
+/* Header style */
+h1 {
+  text-align: center;
+  color: #333;
+}
+
+/* Style for the form container */
+.form-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  border-top: 2px solid #ffa500;
+  padding-top: 20px;
+  gap: 40px;
+}
+
+/* Style for each side of the form */
+.right-side,
+.left-side {
+  flex: 1;
+  margin-right: 20px;
+}
+
+/* Remove margin for the last side */
+.right-side {
+  margin-right: 0;
+}
+
+/* Label and input styling */
+label {
+  display: block;
+  margin: 10px 0 5px;
+  font-weight: bold;
+  color: #333;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="date"],
+select {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+select:focus {
+  border-color: #ffa500;
+  outline: none;
+}
+
+/* Button styling */
+button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background-color: #ffa500;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+button:hover {
+  background-color: #efa51c;
+}
+
+/* Login link styling */
+#log {
+  text-align: center;
+  margin-top: 20px;
+}
+
+#log p {
+  margin: 0;
+  color: #666;
+}
+
+#log a {
+  color: #ffa500;
+  text-decoration: none;
+}
+
+#log a:hover {
+  text-decoration: underline;
+}

@@ -1,0 +1,91 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+.login-container {
+  background-color: white;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 300px;
+}
+h2 {
+  text-align: center;
+  color: #333;
+}
+form {
+  display: flex;
+  flex-direction: column;
+}
+label {
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: #555;
+}
+input[type="text"],
+input[type="password"] {
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  width: 100%;
+  box-sizing: border-box;
+}
+input[type="text"]:focus,
+input[type="password"]:focus {
+  outline: none;
+  border-color: orange;
+}
+button {
+  padding: 10px;
+  background-color: orange;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+button:hover {
+  background-color: #efa51c;
+}
+.error-message {
+  color: red;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.logo {
+  text-align: center; /* Center the logo horizontally in its container */
+}
+
+.logo img {
+  max-width: 100px; /* Adjust this based on your logo size */
+  margin-bottom: 20px;
+  display: block; /* Make the image a block-level element */
+  margin-left: auto; /* Auto margin to center horizontally */
+  margin-right: auto; /* Auto margin to center horizontally */
+}
+#forg,
+#sing {
+  margin-top: 20px;
+  text-align: center; /* Center the content inside these elements */
+}
+
+#forg a,
+#sing a {
+  color: #ffa500;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+#forg a:hover,
+#sing a:hover {
+  text-decoration: underline;
+}
