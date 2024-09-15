@@ -53,11 +53,19 @@ label {
   color: #333;
 }
 
+select {
+  width: 105%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
 input[type="text"],
 input[type="email"],
 input[type="password"],
-input[type="date"],
-select {
+input[type="date"]
+ {
   width: 100%;
   padding: 8px;
   margin-bottom: 10px;
@@ -68,6 +76,7 @@ select {
 input[type="text"]:focus,
 input[type="email"]:focus,
 input[type="password"]:focus,
+input[type="date"]:focus,
 select:focus {
   border-color: #ffa500;
   outline: none;
