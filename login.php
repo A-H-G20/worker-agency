@@ -64,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class="logo">
             <img src="image/logo.png" alt="Logo">
         </div>
-        <h2>Login</h2>
+        <h2>Welcome Back</h2>
         <form method="POST">
             <input type="text" id="identifier" name="identifier" required placeholder="Email or Phone Number">
             <input type="password" id="password" name="password" required placeholder="Password">
