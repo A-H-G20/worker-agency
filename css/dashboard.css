@@ -246,3 +246,53 @@ h2,h3 {
 .header-container button.add:hover {
     background-color: #0056b3;
 }
+.like-cmnts {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    
+ 
+  
+}
+
+.buttons {
+ 
+    flex-direction: row;
+    align-items: center;
+}
+
+.buttons button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.buttons button:hover {
+   
+    transform: scale(1.1);
+}
+
+.buttons img {
+    width: 24px;
+    height: 24px;
+    margin-right: 10px; /* Space between buttons */
+}
+
+.count {
+    display: flex;
+    align-items: center;
+}
+
+.count-label {
+    font-size: 14px;
+    color: #333;
+    margin: 0 10px; /* Space between like and comment counts */
+}
+
+.count-label span {
+    font-weight: bold;
+    margin-right: 4px;
+}

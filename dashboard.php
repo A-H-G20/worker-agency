@@ -13,7 +13,7 @@ $user_id = $_SESSION['user_id'];
 
 // Fetch user and post details from the database
 $query = "
-    SELECT u.profile, u.name, p.user_post, p.create_at
+    SELECT u.profile, u.name, p.post_id, p.user_post, p.create_at
     FROM users u
     JOIN post p ON u.id = p.user_id
     WHERE u.id = ?
@@ -45,7 +45,7 @@ mysqli_stmt_close($stmt);
 
 // Fetch all posts (public posts)
 $query_all_posts = "
-    SELECT u.profile, u.name, p.user_post, p.create_at
+    SELECT u.profile, u.name, p.post_id, p.user_post, p.create_at
     FROM users u
     JOIN post p ON u.id = p.user_id
 ";
@@ -86,18 +86,16 @@ mysqli_close($conn);
             <li><a href="dashboard.php">Dashboard</a></li>
             <li><a href="profile.php">Home</a></li>
             <li><a href="logout.php">Logout</a></li>
-           
         </nav>
-       
     </header>
 
     <main>
+    
         <div class="header-container">
             <h2>Dashboard</h2>
             <button class="add">Add post</button>
         </div>
-                 
- <!--   <div class="story">
+        <div class="story">
         <div class="img">
             <img src="image/logo.png" alt="">
             <label for="">user1</label>
@@ -114,74 +112,84 @@ mysqli_close($conn);
             <img src="image/logo.png" alt="">
             <label for="">user4</label>
         </div>
-    </div>-->
-
-    <div class="add-post-container">
-    
-
-    <div class="add-post" id="add-post-form" style="display: none;">
-        <form method="post" enctype="multipart/form-data">
-            <div class="form-group">
-                <label for="file">Post</label>
-                <input type="file" id="file" name="file" required />
-            </div>
-            <div class="form-group">
-                <button type="submit">Submit</button>
-                <button type="button" class="cancel">Cancel</button>
-            </div>
-        </form>
     </div>
-</div><script src="js/add-post.js"></script>
+        <div class="add-post-container">
+            <div class="add-post" id="add-post-form" style="display: none;">
+                <form method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="file">Post</label>
+                        <input type="file" id="file" name="file" required />
+                    </div>
+                    <div class="form-group">
+                        <button type="submit">Submit</button>
+                        <button type="button" class="cancel">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <script src="js/add-post.js"></script>
 
+        <?php if (!empty($posts)): ?>
+            <?php foreach ($posts as $post): ?>
+                <div class="full-post">
+                    <div class="profile">
+                        <?php if (!empty($post['profile'])): ?>
+                            <img src="image/<?php echo htmlspecialchars($post['profile']); ?>" alt="Profile Image" />
+                        <?php else: ?>
+                            <p>No profile image available.</p>
+                        <?php endif; ?>
+                        <div>
+                            <label for=""><?php echo htmlspecialchars($post['name']); ?></label>
+                            <data value="<?php echo htmlspecialchars($post['create_at']); ?>"><?php echo htmlspecialchars($post['create_at']); ?></data>
+                        </div>
+                    </div>
 
+                    <div class="post">
+                        <?php
+                        $postPath = 'image/' . htmlspecialchars($post['user_post']);
+                        $fileExtension = pathinfo($postPath, PATHINFO_EXTENSION);
+                        $allowedImageTypes = ['jpg', 'jpeg', 'png', 'gif'];
+                        $allowedVideoTypes = ['mp4', 'webm', 'ogg'];
 
-    <?php if (!empty($posts)): ?>
-        <?php foreach ($posts as $post): ?>
-            <div class="full-post">
-                <div class="profile">
-                    <?php if (!empty($post['profile'])): ?>
-                        <img src="image/<?php echo htmlspecialchars($post['profile']); ?>" alt="Profile Image" />
-                    <?php else: ?>
-                        <p>No profile image available.</p>
-                    <?php endif; ?>
-                    <div>
-                        <label for=""><?php echo htmlspecialchars($post['name']); ?></label> <!-- Name from database -->
-                        <data value="<?php echo htmlspecialchars($post['create_at']); ?>"><?php echo htmlspecialchars($post['create_at']); ?></data> <!-- Date from database -->
+                        if (!empty($post['user_post'])):
+                            if (in_array($fileExtension, $allowedImageTypes)): ?>
+                                <img src="<?php echo $postPath; ?>" alt="Post Image" />
+                            <?php elseif (in_array($fileExtension, $allowedVideoTypes)): ?>
+                                <video controls>
+                                    <source src="<?php echo $postPath; ?>" type="video/<?php echo $fileExtension; ?>">
+                                    Your browser does not support the video tag.
+                                </video>
+                            <?php else: ?>
+                                <p>Unsupported file type.</p>
+                            <?php endif; ?>
+                        <?php else: ?>
+                            <p>No post available.</p>
+                        <?php endif; ?>
+                    </div>
+                    
+                    <div class="like-cmnts">
+                        <div class="buttons">
+                            <a href="chat.php?post_id=<?php echo htmlspecialchars($post['post_id']); ?>">
+                                <button class="comments">
+                                    <img src="image/icons/coment.png" alt="Comments" />
+                                </button>
+                            </a>
+                        </div>
+                        <div class="count">
+                            <label for="count-comments" class="count-label">
+                                <span id="count-comments">45</span> Comments
+                            </label>
+                        </div>
                     </div>
                 </div>
-
-                <div class="post">
-                    <?php
-                    // Check file type and display accordingly
-                    $postPath = 'image/' . htmlspecialchars($post['user_post']);
-                    $fileExtension = pathinfo($postPath, PATHINFO_EXTENSION);
-                    $allowedImageTypes = ['jpg', 'jpeg', 'png', 'gif'];
-                    $allowedVideoTypes = ['mp4', 'webm', 'ogg'];
-
-                    if (!empty($post['user_post'])):
-                        if (in_array($fileExtension, $allowedImageTypes)): ?>
-                            <img src="<?php echo $postPath; ?>" alt="Post Image" />
-                        <?php elseif (in_array($fileExtension, $allowedVideoTypes)): ?>
-                            <video controls>
-                                <source src="<?php echo $postPath; ?>" type="video/<?php echo $fileExtension; ?>">
-                                Your browser does not support the video tag.
-                            </video>
-                        <?php else: ?>
-                            <p>Unsupported file type.</p>
-                        <?php endif; ?>
-                    <?php else: ?>
-                        <p>No post available.</p>
-                    <?php endif; ?>
-                </div>
-            </div>
-        <?php endforeach; ?>
-    <?php else: ?>
-        <p>No posts available.</p>
-    <?php endif; ?>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <p>No posts available.</p>
+        <?php endif; ?>
     </main>
 </body>
 
-</html>
+</html
 
 <?php
 // Handle file upload
@@ -269,4 +277,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo "Error: No file uploaded.";
     }
 }
-
+?>
