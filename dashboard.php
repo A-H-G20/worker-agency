@@ -131,7 +131,7 @@ mysqli_close($conn);
             </div>
         </form>
     </div>
-</div><script src="js.js"></script>
+</div><script src="js/add-post.js"></script>
 
 
 
