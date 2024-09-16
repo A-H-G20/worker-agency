@@ -112,7 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <form method="POST" action="">
             <div class="form-container">
                 <div class="right-side">
-                    <label for="name">Full Name:</label>
+                    <label for="name">Full Name:*</label>
                     <input type="text" id="name" name="name" required>
 
                     <label for="email">Email:</label>
