@@ -1,0 +1,190 @@
+/* css/comments.css */
+
+/* General Body Style */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 0;
+}
+
+/* Header Style */
+.head {
+  background-color: #333;
+  color: #fff;
+
+  display: flex;
+  align-items: center;
+  
+}
+
+.return-home {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.return-home img {
+  width: 24px;
+  height: 24px;
+}
+
+/* Comments Container */
+.contents {
+    padding: 20px;
+    width: 80%;
+    margin: 0 auto; /* Center the contents horizontally */
+    flex: 1; 
+}
+
+.comments {
+  background: #fff;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  position: relative;
+  padding-right: 50px; /* Added space on the right */
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.profile img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 10px;
+}
+
+.profile div {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile label.name {
+  font-weight: bold;
+  color: #333;
+}
+
+.profile label.date {
+  font-size: 10px; /* Decreased font size */
+  color: #888;
+}
+
+.mesg {
+  font-size: 14px;
+  color: #333;
+  margin: 0;
+}
+
+/* Options Icon */
+.options {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  position: absolute;
+  top: 15px;
+  right: 15px;
+}
+
+/* Add Comment Section */
+/* css/comments.css */
+
+/* Add Comment Section */
+.add-comments {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  
+  
+  padding: 15px;
+  display: flex;
+  align-items: center;
+ 
+  z-index: 1000;
+}
+
+.add-comments form {
+  display: flex;
+  width: 100%;
+  align-items: center;
+}
+
+.add-comments input[type="text"] {
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  font-size: 14px;
+  color: #333;
+
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  width: 92%;
+}
+
+.add-comments input[type="text"]::placeholder {
+  color: #888;
+  width: 80%;
+}
+
+.add-comments button {
+  border: none;
+  border-radius: 20px;
+  padding: 12px 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s;
+}
+
+.add-comments button:hover {
+  background: #0056b3;
+}
+
+.add-comments button img {
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+}
+
+.add-comments input[type="hidden"] {
+  display: none;
+}
+
+/* Popup box styling */
+.popup-box {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+   
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+        width: 4%;
+    /* Align the popup to the right side of the button */
+    top: 50%;
+    right: calc(-100% - 10px); /* Adjust this to move it to the right side */
+    transform: translateY(-50%);
+}
+
+.popup-box .popup-content p {
+    margin: 0;
+    padding: 5px;
+    cursor: pointer;
+    color: #e74c3c;
+    font-size: 0.9rem;
+}
+
+.popup-box .popup-content p:hover {
+    background-color: #f9f9f9;
+    border-radius: 4px;
+}

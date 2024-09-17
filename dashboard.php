@@ -11,15 +11,14 @@ require 'config.php';
 
 $user_id = $_SESSION['user_id'];
 
-// Fetch user and post details from the database
-$query = "
-    SELECT u.profile, u.name, p.post_id, p.user_post, p.create_at
-    FROM users u
-    JOIN post p ON u.id = p.user_id
-    WHERE u.id = ?
+// Fetch user details for the sidebar
+$query_user = "
+    SELECT profile, name
+    FROM users
+    WHERE id = ?
 ";
 
-$stmt = mysqli_prepare($conn, $query);
+$stmt = mysqli_prepare($conn, $query_user);
 if (!$stmt) {
     echo 'Error preparing the query: ' . mysqli_error($conn);
     exit();
@@ -29,7 +28,7 @@ mysqli_stmt_bind_param($stmt, 'i', $user_id);
 mysqli_stmt_execute($stmt);
 $result = mysqli_stmt_get_result($stmt);
 if (!$result) {
-    echo 'Error fetching posts: ' . mysqli_error($conn);
+    echo 'Error fetching user details: ' . mysqli_error($conn);
     exit();
 }
 
@@ -45,14 +44,15 @@ mysqli_stmt_close($stmt);
 
 // Fetch all posts (public posts)
 $query_all_posts = "
-    SELECT u.profile, u.name, p.post_id, p.user_post, p.create_at
+    SELECT u.profile, u.name, p.post_id, p.user_post, p.create_at,
+           (SELECT COUNT(*) FROM comments c WHERE c.post_id = p.post_id) AS comment_count
     FROM users u
     JOIN post p ON u.id = p.user_id
 ";
 
 $result_all_posts = mysqli_query($conn, $query_all_posts);
 if (!$result_all_posts) {
-    echo 'Error fetching data: ' . mysqli_error($conn);
+    echo 'Error fetching posts: ' . mysqli_error($conn);
     exit();
 }
 
@@ -90,29 +90,28 @@ mysqli_close($conn);
     </header>
 
     <main>
-    
         <div class="header-container">
             <h2>Dashboard</h2>
             <button class="add">Add post</button>
         </div>
         <div class="story">
-        <div class="img">
-            <img src="image/logo.png" alt="">
-            <label for="">user1</label>
+            <div class="img">
+                <img src="image/logo.png" alt="">
+                <label for="">user1</label>
+            </div>
+            <div class="img">
+                <img src="image/logo.png" alt="">
+                <label for="">user2</label>
+            </div>
+            <div class="img">
+                <img src="image/logo.png" alt="">
+                <label for="">user3</label>
+            </div>
+            <div class="img">
+                <img src="image/logo.png" alt="">
+                <label for="">user4</label>
+            </div>
         </div>
-        <div class="img">
-            <img src="image/logo.png" alt="">
-            <label for="">user2</label>
-        </div>
-        <div class="img">
-            <img src="image/logo.png" alt="">
-            <label for="">user3</label>
-        </div>
-        <div class="img">
-            <img src="image/logo.png" alt="">
-            <label for="">user4</label>
-        </div>
-    </div>
         <div class="add-post-container">
             <div class="add-post" id="add-post-form" style="display: none;">
                 <form method="post" enctype="multipart/form-data">
@@ -169,7 +168,7 @@ mysqli_close($conn);
                     
                     <div class="like-cmnts">
                         <div class="buttons">
-                            <a href="chat.php?post_id=<?php echo htmlspecialchars($post['post_id']); ?>">
+                            <a href="comments.php?post_id=<?php echo htmlspecialchars($post['post_id']); ?>">
                                 <button class="comments">
                                     <img src="image/icons/coment.png" alt="Comments" />
                                 </button>
@@ -177,7 +176,7 @@ mysqli_close($conn);
                         </div>
                         <div class="count">
                             <label for="count-comments" class="count-label">
-                                <span id="count-comments">45</span> Comments
+                                <span id="count-comments"><?php echo htmlspecialchars($post['comment_count']); ?></span> Comments
                             </label>
                         </div>
                     </div>
@@ -189,7 +188,7 @@ mysqli_close($conn);
     </main>
 </body>
 
-</html
+</html>
 
 <?php
 // Handle file upload
