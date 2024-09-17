@@ -19,34 +19,86 @@ require 'config.php'; // Assumed DB connection
 
 // Check if form was submitted
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Ensure user is logged in
-    if (isset($_SESSION['user_id'])) {
+    if (isset($_POST['comment'])) {
+        // Adding a comment
         $user_id = $_SESSION['user_id']; // Retrieve user ID from session
         $comment = trim($_POST['comment']); // Get the comment and sanitize it
         $post_id = intval($_POST['post_id']); // Get the post ID
 
         if (!empty($comment)) {
             // Insert the comment into the comments table
-            $stmt = $conn->prepare("INSERT INTO comments (user_id, post_id, comments, create_at) VALUES (?, ?, ?,  NOW())");
+            $stmt = $conn->prepare("INSERT INTO comments (user_id, post_id, comments, create_at) VALUES (?, ?, ?, NOW())");
             $stmt->bind_param('iis', $user_id, $post_id, $comment);
             $stmt->execute();
+            $stmt->close();
 
-            // Update the comment count in the posts table (assuming 'count_cmnts' column exists)
-            $stmt = $conn->prepare("UPDATE post SET count_cmnts = count_cmnts + 1 WHERE post_id = ?");
+            // Update the comment count in the posts table
+            $stmt = $conn->prepare("UPDATE post SET count_cmnts = count_cmnts + 1 WHERE id = ?");
             $stmt->bind_param('i', $post_id);
             $stmt->execute();
+            $stmt->close();
 
             // Redirect back to the post page (or any other desired page)
             header("Location: comments.php?post_id=" . urlencode($post_id));
             exit();
-            
         } else {
             echo "Comment cannot be empty.";
         }
-    } else {
-        echo "You must be logged in to comment.";
+    } elseif (isset($_POST['delete_comment_id'])) {
+        // Deleting a comment
+        if (isset($_SESSION['user_id'])) {
+            $comment_id = intval($_POST['delete_comment_id']);
+
+            // Begin a transaction
+            $conn->begin_transaction();
+
+            try {
+                // Get the post ID associated with the comment
+                $stmt = $conn->prepare("SELECT post_id FROM comments WHERE id = ?");
+                if ($stmt === false) {
+                    throw new Exception("Prepare failed: " . $conn->error);
+                }
+                $stmt->bind_param('i', $comment_id);
+                $stmt->execute();
+                $stmt->bind_result($post_id);
+                $stmt->fetch();
+                $stmt->close();
+
+                if ($post_id) {
+                    // Delete the comment
+                    $stmt = $conn->prepare("DELETE FROM comments WHERE id = ?");
+                    if ($stmt === false) {
+                        throw new Exception("Prepare failed: " . $conn->error);
+                    }
+                    $stmt->bind_param('i', $comment_id);
+                    $stmt->execute();
+                    $stmt->close();
+
+                    // Decrease comment count in the posts table
+                    $stmt = $conn->prepare("UPDATE post SET count_cmnts = count_cmnts - 1 WHERE id = ?");
+                    if ($stmt === false) {
+                        throw new Exception("Prepare failed: " . $conn->error);
+                    }
+                    $stmt->bind_param('i', $post_id);
+                    $stmt->execute();
+                    $stmt->close();
+
+                    // Commit the transaction
+                    $conn->commit();
+                    echo "Comment deleted successfully.";
+                } else {
+                    echo "Comment not found.";
+                }
+            } catch (Exception $e) {
+                // Rollback the transaction if something failed
+                $conn->rollback();
+                echo "Error: " . $e->getMessage();
+            }
+        } else {
+            echo "You must be logged in to delete comments.";
+        }
+        exit(); // Ensure to exit after processing POST requests
     }
-    exit(); // Make sure to exit after processing POST requests
 }
 
 // Fetch all comments for the given post_id
@@ -82,27 +134,24 @@ $comments_result = $stmt->get_result();
 
     <div class="contents">
         <?php while ($comment = $comments_result->fetch_assoc()): ?>
-        <form method="POST" action="process_comment.php">
-            <div class="comments">
-                <div class="profile">
-                    <img src="image/<?php echo htmlspecialchars($comment['profile'] ?? 'default.png'); ?>" alt="Profile Image" />
-                    <div>
-                        <label><?= htmlspecialchars($comment['name'] ?? 'Anonymous'); ?></label>
-                        <label><?= date('g:i a', strtotime($comment['create_at'])); ?></label>
-                    </div>
+        <div class="comments">
+            <div class="profile">
+                <img src="image/<?php echo htmlspecialchars($comment['profile'] ?? 'default.png'); ?>" alt="Profile Image" />
+                <div>
+                    <label><?php echo htmlspecialchars($comment['name'] ?? 'Anonymous'); ?></label>
+                    <label><?php echo date('g:i a', strtotime($comment['create_at'])); ?></label>
                 </div>
-                <p class="mesg"><?= htmlspecialchars($comment['comments'] ?? 'No comment'); ?></p>
-                <img class="options" src="image/icons/options.png" alt="3dots" onclick="togglePopup(this)">
-                <input type="hidden" name="comment_id" value="<?= htmlspecialchars($comment['id'] ?? ''); ?>">
             </div>
-        </form>
+            <p class="mesg"><?php echo htmlspecialchars($comment['comments'] ?? 'No comment'); ?></p>
+            <img class="options" src="image/icons/options.png" alt="Options" onclick="togglePopup(<?php echo htmlspecialchars($comment['id']); ?>)">
+        </div>
         <?php endwhile; ?><br><br><br>
     </div>
 
     <div class="add-comments">
         <form method="POST" action="">
             <input type="text" name="comment" placeholder="Add your comments" required>
-            <input type="hidden" name="post_id" value="<?= htmlspecialchars($post_id); ?>">
+            <input type="hidden" name="post_id" value="<?php echo htmlspecialchars($post_id); ?>">
             <button type="submit">
                 <img src="image/icons/send.png" alt="Send">
             </button>
@@ -110,13 +159,16 @@ $comments_result = $stmt->get_result();
     </div>
 
     <!-- Small popup box with delete option -->
-    <div class="popup-box" id="popup-box">
+    <div class="popup-box" id="popup-box" style="display:none;">
         <div class="popup-content">
-            <p onclick="deleteComment()">Delete</p>
+            <form method="POST" action="">
+                <input type="hidden" name="delete_comment_id" id="delete-comment-id" value="">
+                <button type="submit">Delete</button>
+                <button type="button" onclick="togglePopup()">Cancel</button>
+            </form>
         </div>
     </div>
 
     <script src="js/comments.js"></script>
 </body>
 </html>
-
