@@ -15,6 +15,30 @@ require 'PHPMailer/src/Exception.php';
 require 'PHPMailer/src/PHPMailer.php';
 require 'PHPMailer/src/SMTP.php';
 
+function validatePassword($password) {
+    // Check password length
+    if (strlen($password) < 8) {
+        return "Password must be at least 8 characters long.";
+    }
+
+    // Check for uppercase letter
+    if (!preg_match('/[A-Z]/', $password)) {
+        return "Password must include at least one uppercase letter.";
+    }
+
+    // Check for lowercase letter
+    if (!preg_match('/[a-z]/', $password)) {
+        return "Password must include at least one lowercase letter.";
+    }
+
+    // Check for digit
+    if (!preg_match('/\d/', $password)) {
+        return "Password must include at least one digit.";
+    }
+
+    return true;
+}
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $name = $_POST['name'];
     $email = $_POST['email'];
@@ -24,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $date_of_birth = $_POST['date_of_birth'];
     $phone_number = $_POST['phone_number'];
     $password = $_POST['password'];
-    $role ='user';
+    $role = 'user';
     $mail = new PHPMailer(true);
 
     try {
@@ -41,49 +65,55 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (empty($name) || empty($email) || empty($gender) || empty($category) || empty($date_of_birth) || empty($address) || empty($phone_number) || empty($password)) {
             $error = "All fields are required!";
         } else {
-            // Check if the email or phone number already exists
-            $stmt = $conn->prepare("SELECT id FROM users WHERE email = ? OR phone_number = ?");
-            $stmt->bind_param("ss", $email, $phone_number);
-            $stmt->execute();
-            $stmt->store_result();
-
-            if ($stmt->num_rows > 0) {
-                // Email or phone number already exists
-                $error = "This email or phone number is already registered!";
+            // Validate password
+            $passwordValidation = validatePassword($password);
+            if ($passwordValidation !== true) {
+                $error = $passwordValidation;
             } else {
-                // Generate a random username
-                $username = generateUsername($name);
+                // Check if the email or phone number already exists
+                $stmt = $conn->prepare("SELECT id FROM users WHERE email = ? OR phone_number = ?");
+                $stmt->bind_param("ss", $email, $phone_number);
+                $stmt->execute();
+                $stmt->store_result();
 
-                // Hash the password
-                $hashed_password = password_hash($password, PASSWORD_BCRYPT);
-
-                // Insert the new user into the database
-                $stmt = $conn->prepare("INSERT INTO users (name, username, email, gender, category, address, date_of_birth, phone_number, password, verification_code,role) VALUES (?, ?, ?, ?,?, ?, ?, ?, ?, ?, 'user')");
-                $verification_code = substr(number_format(time() * rand(), 0, '', ''), 0, 6);
-                $stmt->bind_param("ssssssssss", $name, $username, $email, $gender, $category, $address, $date_of_birth, $phone_number, $hashed_password, $verification_code);
-
-                if ($stmt->execute()) {
-                    // Set up the email content
-                    $mail->setFrom('your_email@gmail.com', 'Worker Agency Administrator');
-                    $mail->addAddress($email, $name);
-                    $mail->isHTML(true);
-                    $mail->Subject = 'Email verification';
-                    $mail->Body = '<p>Dear <b>' . htmlspecialchars($name) . '</b>,</p>
-                                   <p>Your verification code is: <b style="font-size: 15px;">' . htmlspecialchars($verification_code) . '</b></p>
-                                   <p>Your username is: <b style="font-size: 15px;">' . htmlspecialchars($username) . '</b></p>
-                                   <p>Regards,</p><p>Worker Agency Administrator</p>';
-
-                    // Send email
-                    $mail->send();
-
-                    // Redirect to email verification page
-                    header("Location: email-verification.php?email=" . urlencode($email));
-                    exit();
+                if ($stmt->num_rows > 0) {
+                    // Email or phone number already exists
+                    $error = "This email or phone number is already registered!";
                 } else {
-                    $error = "Error: " . $stmt->error;
+                    // Generate a random username
+                    $username = generateUsername($name);
+
+                    // Hash the password
+                    $hashed_password = password_hash($password, PASSWORD_BCRYPT);
+
+                    // Insert the new user into the database
+                    $stmt = $conn->prepare("INSERT INTO users (name, username, email, gender, category, address, date_of_birth, phone_number, password, verification_code, role) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'user')");
+                    $verification_code = substr(number_format(time() * rand(), 0, '', ''), 0, 6);
+                    $stmt->bind_param("ssssssssss", $name, $username, $email, $gender, $category, $address, $date_of_birth, $phone_number, $hashed_password, $verification_code);
+
+                    if ($stmt->execute()) {
+                        // Set up the email content
+                        $mail->setFrom('your_email@gmail.com', 'Worker Agency Administrator');
+                        $mail->addAddress($email, $name);
+                        $mail->isHTML(true);
+                        $mail->Subject = 'Email verification';
+                        $mail->Body = '<p>Dear <b>' . htmlspecialchars($name) . '</b>,</p>
+                                       <p>Your verification code is: <b style="font-size: 15px;">' . htmlspecialchars($verification_code) . '</b></p>
+                                       <p>Your username is: <b style="font-size: 15px;">' . htmlspecialchars($username) . '</b></p>
+                                       <p>Regards,</p><p>Worker Agency Administrator</p>';
+
+                        // Send email
+                        $mail->send();
+
+                        // Redirect to email verification page
+                        header("Location: email-verification.php?email=" . urlencode($email));
+                        exit();
+                    } else {
+                        $error = "Error: " . $stmt->error;
+                    }
                 }
+                $stmt->close();
             }
-            $stmt->close();
         }
     } catch (Exception $e) {
         echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
@@ -92,6 +122,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 ?>
+
 
 
 
