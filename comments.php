@@ -116,12 +116,14 @@ $comments_result = $stmt->get_result();
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/comments.css">
     <title>Comments Page</title>
 </head>
+
 <body>
     <div class="head">
         <a href="dashboard.php">
@@ -134,17 +136,17 @@ $comments_result = $stmt->get_result();
 
     <div class="contents">
         <?php while ($comment = $comments_result->fetch_assoc()): ?>
-        <div class="comments">
-            <div class="profile">
-                <img src="image/<?php echo htmlspecialchars($comment['profile'] ?? 'default.png'); ?>" alt="Profile Image" />
-                <div>
-                    <label><?php echo htmlspecialchars($comment['name'] ?? 'Anonymous'); ?></label>
-                    <label><?php echo date('g:i a', strtotime($comment['create_at'])); ?></label>
+            <div class="comments">
+                <div class="profile">
+                    <img src="image/<?php echo htmlspecialchars($comment['profile'] ?? 'default.png'); ?>" alt="Profile Image" />
+                    <div>
+                        <label><?php echo htmlspecialchars($comment['name'] ?? 'Anonymous'); ?></label>
+                        <label><?php echo date('g:i a', strtotime($comment['create_at'])); ?></label>
+                    </div>
                 </div>
+                <p class="mesg"><?php echo htmlspecialchars($comment['comments'] ?? 'No comment'); ?></p>
+                <img class="options" src="image/icons/options.png" alt="Options" onclick="togglePopup(<?php echo htmlspecialchars($comment['id']); ?>)">
             </div>
-            <p class="mesg"><?php echo htmlspecialchars($comment['comments'] ?? 'No comment'); ?></p>
-            <img class="options" src="image/icons/options.png" alt="Options" onclick="togglePopup(<?php echo htmlspecialchars($comment['id']); ?>)">
-        </div>
         <?php endwhile; ?><br><br><br>
     </div>
 
@@ -171,4 +173,5 @@ $comments_result = $stmt->get_result();
 
     <script src="js/comments.js"></script>
 </body>
+
 </html>

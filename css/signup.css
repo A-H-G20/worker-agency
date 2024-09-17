@@ -64,8 +64,7 @@ select {
 input[type="text"],
 input[type="email"],
 input[type="password"],
-input[type="date"]
- {
+input[type="date"] {
   width: 100%;
   padding: 8px;
   margin-bottom: 10px;

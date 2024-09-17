@@ -15,7 +15,8 @@ require 'PHPMailer/src/Exception.php';
 require 'PHPMailer/src/PHPMailer.php';
 require 'PHPMailer/src/SMTP.php';
 
-function validatePassword($password) {
+function validatePassword($password)
+{
     // Check password length
     if (strlen($password) < 8) {
         return "Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character.";

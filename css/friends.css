@@ -1,103 +1,104 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
 }
 
 body {
-    background-color: #f4f4f9;
+  background-color: #f4f4f9;
 }
 
 header.sidebar {
-    background-color: #333;
-    width: 200px;
-    height: 100vh;
-    position: fixed;
-    top: 0;
-    left: 0;
-    padding: 20px 0;
+  background-color: #333;
+  width: 200px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding: 20px 0;
 }
 
 header.sidebar nav {
-    list-style-type: none;
+  list-style-type: none;
 }
 
 header.sidebar li {
-    margin: 20px 0;
+  margin: 20px 0;
 }
 
 header.sidebar a {
-    color: #fff;
-    text-decoration: none;
-    font-size: 18px;
-    display: block;
-    padding: 10px 20px;
-    transition: background 0.3s ease;
+  color: #fff;
+  text-decoration: none;
+  font-size: 18px;
+  display: block;
+  padding: 10px 20px;
+  transition: background 0.3s ease;
 }
 
 header.sidebar a:hover {
-    background-color: #555;
-    border-radius: 5px;
+  background-color: #555;
+  border-radius: 5px;
 }
 
-h2,h3 {
-    margin: 20px ;
-    margin-left: 220px;
-    font-size: 24px;
+h2,
+h3 {
+  margin: 20px;
+  margin-left: 220px;
+  font-size: 24px;
 }
 
 /* Ensure the container fills the available width */
 .friends-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 20px; /* Space between grid items */
-    padding: 20px;
-    margin-left: 20%;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px; /* Space between grid items */
+  padding: 20px;
+  margin-left: 20%;
 }
 
 .friends {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    border: 1px solid #ddd; /* Border around each user form */
-    border-radius: 8px; /* Rounded corners */
-    padding: 15px;
-    background-color: #fff; /* White background */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-    transition: background-color 0.3s, box-shadow 0.3s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid #ddd; /* Border around each user form */
+  border-radius: 8px; /* Rounded corners */
+  padding: 15px;
+  background-color: #fff; /* White background */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  transition: background-color 0.3s, box-shadow 0.3s;
 }
 
 .friends:hover {
-    background-color: #f9f9f9; /* Light grey background on hover */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Darker shadow on hover */
+  background-color: #f9f9f9; /* Light grey background on hover */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Darker shadow on hover */
 }
 
 .friends img {
-    width: 100px; /* Fixed size for profile images */
-    height: 100px;
-    border-radius: 50%; /* Circular profile image */
-    object-fit: cover; /* Ensure image covers the area */
-    margin-bottom: 10px; /* Space between image and name */
+  width: 100px; /* Fixed size for profile images */
+  height: 100px;
+  border-radius: 50%; /* Circular profile image */
+  object-fit: cover; /* Ensure image covers the area */
+  margin-bottom: 10px; /* Space between image and name */
 }
 
 .friends label {
-    font-size: 16px;
-    font-weight: bold;
-    margin-bottom: 10px; /* Space between name and button */
-    text-align: center; /* Center text */
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 10px; /* Space between name and button */
+  text-align: center; /* Center text */
 }
 
 .friends button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    background-color: #007bff; /* Primary button color */
-    color: white;
-    cursor: pointer;
-    transition: background-color 0.3s;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff; /* Primary button color */
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
 .friends button:hover {
-    background-color: #0056b3; /* Darker color on hover */
+  background-color: #0056b3; /* Darker color on hover */
 }

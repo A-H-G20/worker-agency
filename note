@@ -1,1 +1,0 @@
-  <img src="image/<?php echo htmlspecialchars($data['profile']); ?>" alt="Profile Image" />

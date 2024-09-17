@@ -166,7 +166,7 @@ mysqli_close($conn);
                             <p>No post available.</p>
                         <?php endif; ?>
                     </div>
-                    
+
                     <div class="like-cmnts">
                         <div class="buttons">
                             <a href="comments.php?post_id=<?php echo htmlspecialchars($post['post_id']); ?>">

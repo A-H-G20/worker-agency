@@ -48,53 +48,56 @@ $conn->close();
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="css/friends.css">
 </head>
+
 <body>
-<header class="sidebar">
-    <nav>
-        <div class="logo">
-            <?php if (!empty($data['profile'])): ?>
-            <!-- here profile image-->
+    <header class="sidebar">
+        <nav>
+            <div class="logo">
+                <?php if (!empty($data['profile'])): ?>
+                    <!-- here profile image-->
+                <?php else: ?>
+                    <p>No profile image available.</p>
+                <?php endif; ?>
+            </div>
+            <li><a href="dashboard.php">Dashboard</a></li>
+            <li><a href="profile.php">Home</a></li>
+            <li><a href="logout.php">Logout</a></li>
+        </nav>
+    </header>
+
+    <main>
+        <div class="friends-container">
+            <?php if (!empty($users)): ?>
+                <?php foreach ($users as $user): ?>
+                    <form class="friends" action="add_friends.php" method="post">
+                        <div class="profile-image">
+                            <?php if (!empty($user['profile'])): ?>
+                                <img src="image/<?php echo htmlspecialchars($user['profile']); ?>" alt="Profile Image">
+                            <?php else: ?>
+                                <img src="image/default-profile.png" alt="Default Profile Image">
+                            <?php endif; ?>
+                        </div>
+                        <label for="name"><?php echo htmlspecialchars($user['name']); ?></label>
+                        <input type="hidden" name="friend_id" value="<?php echo htmlspecialchars($user['id']); ?>">
+                        <button type="submit" <?php echo in_array($user['id'], $friends) ? 'disabled' : ''; ?>>
+                            <?php echo in_array($user['id'], $friends) ? 'Added' : 'Add'; ?>
+                        </button>
+                    </form>
+                <?php endforeach; ?>
             <?php else: ?>
-                <p>No profile image available.</p>
+                <p>No users available.</p>
             <?php endif; ?>
         </div>
-        <li><a href="dashboard.php">Dashboard</a></li>
-        <li><a href="profile.php">Home</a></li>
-        <li><a href="logout.php">Logout</a></li>
-    </nav>
-</header>
-
-<main>
-    <div class="friends-container">
-        <?php if (!empty($users)): ?>
-            <?php foreach ($users as $user): ?>
-                <form class="friends" action="add_friends.php" method="post">
-                    <div class="profile-image">
-                        <?php if (!empty($user['profile'])): ?>
-                            <img src="image/<?php echo htmlspecialchars($user['profile']); ?>" alt="Profile Image">
-                        <?php else: ?>
-                            <img src="image/default-profile.png" alt="Default Profile Image">
-                        <?php endif; ?>
-                    </div>
-                    <label for="name"><?php echo htmlspecialchars($user['name']); ?></label>
-                    <input type="hidden" name="friend_id" value="<?php echo htmlspecialchars($user['id']); ?>">
-                    <button type="submit" <?php echo in_array($user['id'], $friends) ? 'disabled' : ''; ?>>
-                        <?php echo in_array($user['id'], $friends) ? 'Added' : 'Add'; ?>
-                    </button>
-                </form>
-            <?php endforeach; ?>
-        <?php else: ?>
-            <p>No users available.</p>
-        <?php endif; ?>
-    </div>
-</main>
+    </main>
 </body>
+
 </html>
 
 
@@ -107,10 +110,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Ensure user is logged in
     if (isset($_SESSION['user_id'])) {
         $user_id = $_SESSION['user_id']; // Retrieve user ID from session
-        
+
         // Retrieve the friend ID from POST data
         $friend_id = isset($_POST['friend_id']) ? $_POST['friend_id'] : null;
-        
+
         if ($friend_id) {
             // Insert the friend request into the friends table
             $stmt = $conn->prepare("INSERT INTO friends (user_id, friend_id, date) VALUES (?, ?, NOW())");
@@ -124,7 +127,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $stmt->execute();
 
             // Redirect back to the friends page (or any other desired page)
-            echo"The friends added";
+            echo "The friends added";
             header("Location: add_friends.php");
             exit();
         } else {
