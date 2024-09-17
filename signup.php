@@ -18,7 +18,7 @@ require 'PHPMailer/src/SMTP.php';
 function validatePassword($password) {
     // Check password length
     if (strlen($password) < 8) {
-        return "Password must be at least 8 characters long.";
+        return "Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character.";
     }
 
     // Check for uppercase letter
@@ -280,7 +280,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <input type="text" id="phone_number" name="phone_number" required>
 
                     <label for="password">Password:</label>
-                    <input type="password" id="password" name="password" required>
+                    <input type="password" id="password" name="password" required placeholder="Must be at least 8 char 1 capital 1 small letter 1 digits ">
                 </div>
             </div>
 
