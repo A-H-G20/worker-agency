@@ -71,10 +71,15 @@ mysqli_stmt_execute($stmt_chat);
 // Bind result variables for chat history
 mysqli_stmt_bind_result($stmt_chat, $sender_id, $message, $created_at);
 
-// Fetch the chat history
 $chat_history = [];
 while (mysqli_stmt_fetch($stmt_chat)) {
-    $chat_history[] = [
+    $date = date('Y-m-d', strtotime($created_at));
+    $dayOfWeek = date('l', strtotime($created_at)); // Day of the week
+    $chat_history[$date] = [
+        'day' => $dayOfWeek,
+        'messages' => $chat_history[$date]['messages'] ?? []
+    ];
+    $chat_history[$date]['messages'][] = [
         'sender_id' => $sender_id,
         'message' => $message,
         'created_at' => $created_at
@@ -105,13 +110,28 @@ mysqli_close($conn);
                     .then(data => {
                         if (Array.isArray(data)) {
                             chatMessagesElement.innerHTML = '';
+                            let lastDate = '';
+
                             data.forEach(message => {
+                                const messageDate = new Date(message.created_at).toLocaleDateString();
+                                const dayOfWeek = new Date(message.created_at).toLocaleDateString('en-US', { weekday: 'long' });
+
+                                if (messageDate !== lastDate) {
+                                    const dateHeader = document.createElement('div');
+                                    dateHeader.className = 'date-header';
+                                    dateHeader.textContent = `${dayOfWeek}, ${messageDate}`;
+                                    chatMessagesElement.appendChild(dateHeader);
+                                    lastDate = messageDate;
+                                }
+
                                 const messageElement = document.createElement('div');
                                 messageElement.className = `message ${message.sender_id === <?php echo json_encode($current_user_id); ?> ? 'sent' : 'received'}`;
                                 messageElement.innerHTML = `
-                                   
                                     <div class="message-text">
                                         <p>${message.message}</p>
+                                    </div>
+                                    <div class="message-time">
+                                        <small>${new Date(message.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</small>
                                     </div>
                                 `;
                                 chatMessagesElement.appendChild(messageElement);
@@ -144,10 +164,15 @@ mysqli_close($conn);
     </script>
 </head>
 <body>
-    <div class="chat-container">
-        <div class="chat-header">
-            Chat with <?php echo htmlspecialchars($chat_user['name']); ?>
-        </div>
+ <div class="chat-container">
+      
+ <div class="chat-header">
+    <a href="contact.php" class="back-link">
+        <img src="image/icons/back.png "alt="Back to Content" class="back-image">
+    </a>
+    <span class="chat-header-name"><?php echo htmlspecialchars($chat_user['name']); ?></span>
+</div>
+
         <div class="chat-messages">
             <!-- Messages will be injected here by JavaScript -->
         </div>
