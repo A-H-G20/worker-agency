@@ -7,7 +7,9 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-// Check if post_id is passed via GET
+require 'config.php'; // Assumed DB connection
+
+// Fetch post_id from GET request
 if (isset($_GET['post_id'])) {
     $post_id = intval($_GET['post_id']); // Sanitize post_id from the URL
 } else {
@@ -15,9 +17,7 @@ if (isset($_GET['post_id'])) {
     exit();
 }
 
-require 'config.php'; // Assumed DB connection
-
-// Check if form was submitted
+// Handle form submissions
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['comment'])) {
         // Adding a comment
@@ -33,12 +33,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $stmt->close();
 
             // Update the comment count in the posts table
-            $stmt = $conn->prepare("UPDATE post SET count_cmnts = count_cmnts + 1 WHERE id = ?");
+            $stmt = $conn->prepare("UPDATE post SET count_cmnts = count_cmnts + 1 WHERE post_id = ?");
             $stmt->bind_param('i', $post_id);
             $stmt->execute();
             $stmt->close();
 
-            // Redirect back to the post page (or any other desired page)
+            // Redirect back to the post page
             header("Location: comments.php?post_id=" . urlencode($post_id));
             exit();
         } else {
@@ -46,58 +46,45 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     } elseif (isset($_POST['delete_comment_id'])) {
         // Deleting a comment
-        if (isset($_SESSION['user_id'])) {
-            $comment_id = intval($_POST['delete_comment_id']);
+        $comment_id = intval($_POST['delete_comment_id']);
 
-            // Begin a transaction
-            $conn->begin_transaction();
+        // Begin a transaction
+        $conn->begin_transaction();
 
-            try {
-                // Get the post ID associated with the comment
-                $stmt = $conn->prepare("SELECT post_id FROM comments WHERE id = ?");
-                if ($stmt === false) {
-                    throw new Exception("Prepare failed: " . $conn->error);
-                }
+        try {
+            // Get the post ID associated with the comment
+            $stmt = $conn->prepare("SELECT post_id FROM comments WHERE id = ?");
+            $stmt->bind_param('i', $comment_id);
+            $stmt->execute();
+            $stmt->bind_result($post_id_from_db);
+            $stmt->fetch();
+            $stmt->close();
+
+            if ($post_id_from_db) {
+                // Delete the comment
+                $stmt = $conn->prepare("DELETE FROM comments WHERE id = ?");
                 $stmt->bind_param('i', $comment_id);
                 $stmt->execute();
-                $stmt->bind_result($post_id);
-                $stmt->fetch();
                 $stmt->close();
 
-                if ($post_id) {
-                    // Delete the comment
-                    $stmt = $conn->prepare("DELETE FROM comments WHERE id = ?");
-                    if ($stmt === false) {
-                        throw new Exception("Prepare failed: " . $conn->error);
-                    }
-                    $stmt->bind_param('i', $comment_id);
-                    $stmt->execute();
-                    $stmt->close();
+                // Decrease comment count in the posts table
+                $stmt = $conn->prepare("UPDATE post SET count_cmnts = count_cmnts - 1 WHERE post_id = ?");
+                $stmt->bind_param('i', $post_id_from_db);
+                $stmt->execute();
+                $stmt->close();
 
-                    // Decrease comment count in the posts table
-                    $stmt = $conn->prepare("UPDATE post SET count_cmnts = count_cmnts - 1 WHERE id = ?");
-                    if ($stmt === false) {
-                        throw new Exception("Prepare failed: " . $conn->error);
-                    }
-                    $stmt->bind_param('i', $post_id);
-                    $stmt->execute();
-                    $stmt->close();
-
-                    // Commit the transaction
-                    $conn->commit();
-                    echo "Comment deleted successfully.";
-                } else {
-                    echo "Comment not found.";
-                }
-            } catch (Exception $e) {
-                // Rollback the transaction if something failed
-                $conn->rollback();
-                echo "Error: " . $e->getMessage();
+                // Commit the transaction
+                $conn->commit();
+                header('Location: comments.php?post_id=' . urlencode($post_id_from_db));
+                exit();
+            } else {
+                echo "Comment not found.";
             }
-        } else {
-            echo "You must be logged in to delete comments.";
+        } catch (Exception $e) {
+            // Rollback the transaction if something failed
+            $conn->rollback();
+            echo "Error: " . $e->getMessage();
         }
-        exit(); // Ensure to exit after processing POST requests
     }
 }
 
@@ -128,7 +115,7 @@ $comments_result = $stmt->get_result();
     <div class="head">
         <a href="dashboard.php">
             <button class="return-home">
-                <img src="image/icons/back.png" />
+                <img src="image/icons/back.png" alt="Back" />
             </button>
         </a>
         <h2>Comments</h2>
@@ -164,7 +151,9 @@ $comments_result = $stmt->get_result();
     <div class="popup-box" id="popup-box" style="display:none;">
         <div class="popup-content">
             <form method="POST" action="">
+                <input type="hidden" name="post_id" value="<?php echo htmlspecialchars($post_id); ?>">
                 <input type="hidden" name="delete_comment_id" id="delete-comment-id" value="">
+                <label for="">Are you want to delete this comments??</label><br><br>
                 <button type="submit">Delete</button>
                 <button type="button" onclick="togglePopup()">Cancel</button>
             </form>

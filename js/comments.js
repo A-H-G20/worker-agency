@@ -1,14 +1,14 @@
 function togglePopup(commentId) {
-  const popup = document.getElementById("popup-box");
-  const deleteButton = document.getElementById("delete-comment-id");
-
-  if (popup.style.display === "none" || !popup.style.display) {
-    popup.style.display = "block";
-    deleteButton.value = commentId;
+  const popupBox = document.getElementById('popup-box');
+  const deleteCommentIdInput = document.getElementById('delete-comment-id');
+  if (popupBox.style.display === 'none') {
+      deleteCommentIdInput.value = commentId; // Set the comment ID to be deleted
+      popupBox.style.display = 'flex'; // Show the popup
   } else {
-    popup.style.display = "none";
+      popupBox.style.display = 'none'; // Hide the popup
   }
 }
+
 document.addEventListener("DOMContentLoaded", function () {
   const popupBox = document.getElementById("popup-box");
   const deleteButton = document.getElementById("delete-button");

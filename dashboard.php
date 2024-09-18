@@ -1,4 +1,5 @@
 <?php
+ob_start();
 session_start();
 
 // Check if the user is logged in
@@ -42,12 +43,13 @@ if (!$data) {
 // Close the statement
 mysqli_stmt_close($stmt);
 
-// Fetch all posts (public posts)
+// Fetch all posts (public posts) ordered by the newest date first
 $query_all_posts = "
     SELECT u.profile, u.name, p.post_id, p.user_post, p.create_at,
            (SELECT COUNT(*) FROM comments c WHERE c.post_id = p.post_id) AS comment_count
     FROM users u
     JOIN post p ON u.id = p.user_id
+    ORDER BY p.create_at DESC
 ";
 
 $result_all_posts = mysqli_query($conn, $query_all_posts);
@@ -191,8 +193,9 @@ mysqli_close($conn);
 </body>
 
 </html>
-
 <?php
+$error_message = '';
+
 // Handle file upload
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_FILES['file'])) {
@@ -201,81 +204,86 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             switch ($_FILES['file']['error']) {
                 case UPLOAD_ERR_INI_SIZE:
                 case UPLOAD_ERR_FORM_SIZE:
-                    echo "Error: File size exceeds the maximum limit.";
+                    $error_message = "Error: File size exceeds the maximum limit.";
                     break;
                 case UPLOAD_ERR_PARTIAL:
-                    echo "Error: The uploaded file was only partially uploaded.";
+                    $error_message = "Error: The uploaded file was only partially uploaded.";
                     break;
                 case UPLOAD_ERR_NO_FILE:
-                    echo "Error: No file was uploaded.";
+                    $error_message = "Error: No file was uploaded.";
                     break;
                 case UPLOAD_ERR_NO_TMP_DIR:
-                    echo "Error: Missing a temporary folder.";
+                    $error_message = "Error: Missing a temporary folder.";
                     break;
                 case UPLOAD_ERR_CANT_WRITE:
-                    echo "Error: Failed to write file to disk.";
+                    $error_message = "Error: Failed to write file to disk.";
                     break;
                 case UPLOAD_ERR_EXTENSION:
-                    echo "Error: A PHP extension stopped the file upload.";
+                    $error_message = "Error: A PHP extension stopped the file upload.";
                     break;
                 default:
-                    echo "Error: Unknown error occurred during file upload.";
+                    $error_message = "Error: Unknown error occurred during file upload.";
             }
-            exit();
-        }
+            // Store error and exit without displaying output immediately
+        } else {
+            $fileTmpPath = $_FILES['file']['tmp_name'];
+            $fileName = basename($_FILES['file']['name']);
+            $uploadDir = 'image/';
+            $filePath = $uploadDir . $fileName;
 
-        $fileTmpPath = $_FILES['file']['tmp_name'];
-        $fileName = basename($_FILES['file']['name']);
-        $uploadDir = 'image/';
-        $filePath = $uploadDir . $fileName;
+            // Check if directory exists, if not create it
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0755, true);
+            }
 
-        // Check if directory exists, if not create it
-        if (!is_dir($uploadDir)) {
-            mkdir($uploadDir, 0755, true);
-        }
+            // Validate file type
+            $allowedFileTypes = [
+                'image/jpeg',   // JPEG images
+                'image/png',    // PNG images
+                'image/gif',    // GIF images
+                'video/mp4',    // MP4 videos
+                'video/webm',   // WebM videos
+                'video/ogg'     // Ogg videos
+            ];
+            $fileType = mime_content_type($fileTmpPath);
 
-        // Validate file type
-        $allowedFileTypes = [
-            'image/jpeg',   // JPEG images
-            'image/png',    // PNG images
-            'image/gif',    // GIF images
-            'video/mp4',    // MP4 videos
-            'video/webm',   // WebM videos
-            'video/ogg'     // Ogg videos
-        ];
-        $fileType = mime_content_type($fileTmpPath);
+            if (in_array($fileType, $allowedFileTypes)) {
+                // Move uploaded file to the target directory
+                if (move_uploaded_file($fileTmpPath, $filePath)) {
+                    // Insert data into the database
+                    $insertDate = date('Y-m-d H:i:s'); // Current date and time
+                    require 'config.php';  // Ensure the DB connection is available again
+                    $query = "INSERT INTO post (user_id, user_post, create_at) VALUES (?, ?, ?)";
+                    $stmt = mysqli_prepare($conn, $query);
+                    if ($stmt) {
+                        mysqli_stmt_bind_param($stmt, 'iss', $user_id, $fileName, $insertDate);
+                        if (mysqli_stmt_execute($stmt)) {
+                            mysqli_stmt_close($stmt);
+                            mysqli_close($conn);
 
-        if (in_array($fileType, $allowedFileTypes)) {
-            // Move uploaded file to the target directory
-            if (move_uploaded_file($fileTmpPath, $filePath)) {
-                // Insert data into the database
-                $insertDate = date('Y-m-d H:i:s'); // Current date and time
-                require 'config.php';  // Ensure the DB connection is available again
-                $query = "INSERT INTO post (user_id, user_post, create_at) VALUES (?, ?, ?)";
-                $stmt = mysqli_prepare($conn, $query);
-                if ($stmt) {
-                    mysqli_stmt_bind_param($stmt, 'iss', $user_id, $fileName, $insertDate);
-                    if (mysqli_stmt_execute($stmt)) {
-                        mysqli_stmt_close($stmt);
-                        mysqli_close($conn);
-
-                        // Redirect to avoid form resubmission
-                        header("Location: dashboard.php");
-                        exit();
+                            // Redirect to avoid form resubmission
+                            header("Location: dashboard.php");
+                            exit();
+                        } else {
+                            $error_message = "Error: Could not execute the query. " . mysqli_error($conn);
+                        }
                     } else {
-                        echo "Error: Could not execute the query. " . mysqli_error($conn);
+                        $error_message = "Error: Could not prepare the query. " . mysqli_error($conn);
                     }
                 } else {
-                    echo "Error: Could not prepare the query. " . mysqli_error($conn);
+                    $error_message = "Error: Could not move the uploaded file.";
                 }
             } else {
-                echo "Error: Could not move the uploaded file.";
+                $error_message = "Error: Invalid file type. Please upload a JPEG, PNG, GIF image, or MP4, WebM, Ogg video.";
             }
-        } else {
-            echo "Error: Invalid file type. Please upload a JPEG, PNG, GIF image, or MP4, WebM, Ogg video.";
         }
     } else {
-        echo "Error: No file uploaded.";
+        $error_message = "Error: No file uploaded.";
     }
 }
-?>
+
+// After the script is executed, display any error message
+if ($error_message) {
+    echo $error_message;
+}
+ob_end_flush();
