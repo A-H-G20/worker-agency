@@ -1,0 +1,98 @@
+    /* General body styling */
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+    }
+    
+    header.sidebar {
+      background-color: #333;
+      width: 200px;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      padding: 20px 0;
+    }
+    
+    header.sidebar nav {
+      list-style-type: none;
+    }
+    
+    header.sidebar li {
+      margin: 20px 0;
+    }
+    
+    header.sidebar a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 18px;
+      display: block;
+      padding: 10px 20px;
+      transition: background 0.3s ease;
+    }
+    
+    header.sidebar a:hover {
+      background-color: #555;
+      border-radius: 5px;
+    }
+    
+    /* Logo styling */
+    .logo img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 20px;
+    }
+    
+    /* Header styling */
+    
+    h2,
+    h3 {
+      margin: 20px;
+      margin-left: 220px;
+      font-size: 24px;
+    }
+    
+    /* Users section styling */
+    .users {
+        margin-left: 220px; /* Space for sidebar */
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .users img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+    
+    .users label {
+        font-size: 18px;
+        font-weight: bold;
+        color: #333;
+    }
+    
+    /* Additional styling */
+    a {
+        transition: 0.3s ease;
+    }
+    
+    a:hover {
+        opacity: 0.8;
+    }
+    .logo {
+        text-align: center; /* Center the logo horizontally in its container */
+      }
+      
+      .logo img {
+        margin-right: 10px; /* Space between image and label */
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+      }

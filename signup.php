@@ -1,3 +1,4 @@
+
 <?php
 session_start();
 require 'config.php'; // Include the DB connection
@@ -49,6 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $date_of_birth = $_POST['date_of_birth'];
     $phone_number = $_POST['phone_number'];
     $password = $_POST['password'];
+    $profile = 'images.png'; // Set default profile image
     $role = 'user';
     $mail = new PHPMailer(true);
 
@@ -87,10 +89,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     // Hash the password
                     $hashed_password = password_hash($password, PASSWORD_BCRYPT);
 
-                    // Insert the new user into the database
-                    $stmt = $conn->prepare("INSERT INTO users (name, username, email, gender, category, address, date_of_birth, phone_number, password, verification_code, role) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'user')");
+                    // Insert the new user into the database, including the profile image
+                    $stmt = $conn->prepare("INSERT INTO users (name, username, email, gender, category, address, date_of_birth, phone_number, password, verification_code, profile, role) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'user')");
                     $verification_code = substr(number_format(time() * rand(), 0, '', ''), 0, 6);
-                    $stmt->bind_param("ssssssssss", $name, $username, $email, $gender, $category, $address, $date_of_birth, $phone_number, $hashed_password, $verification_code);
+                    $stmt->bind_param("sssssssssss", $name, $username, $email, $gender, $category, $address, $date_of_birth, $phone_number, $hashed_password, $verification_code, $profile);
 
                     if ($stmt->execute()) {
                         // Set up the email content
@@ -123,7 +125,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 ?>
-
 
 
 

@@ -102,3 +102,13 @@ h3 {
 .friends button:hover {
   background-color: #0056b3; /* Darker color on hover */
 }
+.logo {
+  text-align: center; /* Center the logo horizontally in its container */
+}
+
+.logo img {
+  margin-right: 10px; /* Space between image and label */
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+}

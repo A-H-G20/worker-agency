@@ -1,4 +1,5 @@
 <?php
+
 session_start();
 
 // Check if the user is logged in
@@ -7,6 +8,62 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
+require 'config.php';
+
+$user_id = $_SESSION['user_id'];
+
+// Fetch user details for the sidebar
+$query_user = "
+    SELECT profile, name
+    FROM users
+    WHERE id = ?
+";
+
+$stmt = mysqli_prepare($conn, $query_user);
+if (!$stmt) {
+    echo 'Error preparing the query: ' . mysqli_error($conn);
+    exit();
+}
+
+mysqli_stmt_bind_param($stmt, 'i', $user_id);
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
+if (!$result) {
+    echo 'Error fetching user details: ' . mysqli_error($conn);
+    exit();
+}
+
+// Fetch data from the result set
+$data = mysqli_fetch_assoc($result);
+if (!$data) {
+    echo 'No data found.';
+    $data = [];
+}
+
+// Close the statement
+mysqli_stmt_close($stmt);
+
+// Fetch all posts (public posts)
+$query_all_posts = "
+    SELECT u.profile, u.name, p.post_id, p.user_post, p.create_at,
+           (SELECT COUNT(*) FROM comments c WHERE c.post_id = p.post_id) AS comment_count
+    FROM users u
+    JOIN post p ON u.id = p.user_id
+";
+
+$result_all_posts = mysqli_query($conn, $query_all_posts);
+if (!$result_all_posts) {
+    echo 'Error fetching posts: ' . mysqli_error($conn);
+    exit();
+}
+
+$posts = [];
+while ($row = mysqli_fetch_assoc($result_all_posts)) {
+    $posts[] = $row;
+}
+
+// Close the connection
+mysqli_close($conn);
 // Fetch all users except the logged-in user
 require 'config.php';
 
@@ -59,9 +116,9 @@ $conn->close();
 <body>
     <header class="sidebar">
         <nav>
-            <div class="logo">
+        <div class="logo">
                 <?php if (!empty($data['profile'])): ?>
-                    <!-- here profile image-->
+                    <img src="image/<?php echo htmlspecialchars($data['profile']); ?>" alt="Profile Image" />
                 <?php else: ?>
                     <p>No profile image available.</p>
                 <?php endif; ?>
