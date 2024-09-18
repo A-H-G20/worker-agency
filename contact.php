@@ -42,81 +42,52 @@ if (!$data) {
 // Close the statement
 mysqli_stmt_close($stmt);
 
-// Fetch all posts (public posts)
-$query_all_posts = "
-    SELECT u.profile, u.name, p.post_id, p.user_post, p.create_at,
-           (SELECT COUNT(*) FROM comments c WHERE c.post_id = p.post_id) AS comment_count
+// Fetch friends of the logged-in user
+$query_friends = "
+    SELECT u.id, u.name, u.profile
     FROM users u
-    JOIN post p ON u.id = p.user_id
+    JOIN friends f ON u.id = f.friend_id
+    WHERE f.user_id = ?
 ";
 
-$result_all_posts = mysqli_query($conn, $query_all_posts);
-if (!$result_all_posts) {
-    echo 'Error fetching posts: ' . mysqli_error($conn);
+$stmt_friends = mysqli_prepare($conn, $query_friends);
+if (!$stmt_friends) {
+    echo 'Error preparing the query: ' . mysqli_error($conn);
     exit();
 }
 
-$posts = [];
-while ($row = mysqli_fetch_assoc($result_all_posts)) {
-    $posts[] = $row;
+mysqli_stmt_bind_param($stmt_friends, 'i', $user_id);
+mysqli_stmt_execute($stmt_friends);
+$result_friends = mysqli_stmt_get_result($stmt_friends);
+if (!$result_friends) {
+    echo 'Error fetching friends: ' . mysqli_error($conn);
+    exit();
 }
 
-// Close the connection
-mysqli_close($conn);
-
-
-// Include your database connection here
-include 'config.php'; // Make sure to replace with your actual connection file
-
-// Get the logged-in user's ID from the session
-$current_user_id = $_SESSION['user_id'];
-
-// Query to fetch all users except the current logged-in user
-$sql = "SELECT id, name, profile FROM users WHERE id != ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $current_user_id); // 'i' means integer
-$stmt->execute();
-$result = $stmt->get_result();
-echo '<div class="head">
-        <h2>Chatting Page</h2>
-    </div>';
-// Check if there are any users found
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        // Output the user details in HTML format
-        echo '<div class="users">';
-        echo '<a href="chat_with_user.php?user_id=' . htmlspecialchars($row['id']) . '">';
-        if (!empty($row['profile'])) {
-            echo '<img src="image/' . htmlspecialchars($row['profile']) . '" alt="Profile Image">';
-        } else {
-            echo '<img src="default_profile.png" alt="Default Profile">';
-        }
-        echo '<label for="name">' . htmlspecialchars($row['name']) . '</label>';
-        echo '</a>';
-        echo '</div>';
-    }
-} else {
-    echo "<p>No other users found.</p>";
+$friends = [];
+while ($row = mysqli_fetch_assoc($result_friends)) {
+    $friends[] = $row;
 }
 
 // Close the statement and connection
-$stmt->close();
-$conn->close();
+mysqli_stmt_close($stmt_friends);
+mysqli_close($conn);
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/contact.css">
-    <title>Document</title>
+    <title>Friends List</title>
 </head>
+
 <body>
-<header class="sidebar">
+    <header class="sidebar">
         <nav>
-        <div class="logo">
+            <div class="logo">
                 <?php if (!empty($data['profile'])): ?>
                     <img src="image/<?php echo htmlspecialchars($data['profile']); ?>" alt="Profile Image" />
                 <?php else: ?>
@@ -125,12 +96,35 @@ $conn->close();
             </div>
             <li><a href="dashboard.php">Dashboard</a></li>
             <li><a href="add_friends.php">Add Friends</a></li>
-            <li><a href="profile.php">profile</a></li>
-            <li><a href="chat.php">chat</a></li>
+            <li><a href="profile.php">Profile</a></li>
+            <li><a href="chat.php">Chat</a></li>
             <li><a href="logout.php">Logout</a></li>
         </nav>
     </header>
-        
-        
+
+    <div class="head">
+        <h2>Friends List</h2>
+    </div>
+
+    <?php if (!empty($friends)): ?>
+        <div class="users">
+            <?php foreach ($friends as $friend): ?>
+                <div class="user">
+                    <a href="chat_with_user.php?user_id=<?php echo htmlspecialchars($friend['id']); ?>">
+                        <?php if (!empty($friend['profile'])): ?>
+                            <img src="image/<?php echo htmlspecialchars($friend['profile']); ?>" alt="Profile Image">
+                        <?php else: ?>
+                            <img src="default_profile.png" alt="Default Profile">
+                        <?php endif; ?>
+                        <label for="name"><?php echo htmlspecialchars($friend['name']); ?></label>
+                    </a>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    <?php else: ?>
+        <p>No friends found.</p>
+    <?php endif; ?>
+
 </body>
+
 </html>

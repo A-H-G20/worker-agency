@@ -1,98 +1,138 @@
-    /* General body styling */
-    body {
-        margin: 0;
-        padding: 0;
-        font-family: Arial, sans-serif;
-        background-color: #f4f4f4;
-    }
-    
-    header.sidebar {
-      background-color: #333;
-      width: 200px;
-      height: 100vh;
-      position: fixed;
-      top: 0;
-      left: 0;
-      padding: 20px 0;
-    }
-    
-    header.sidebar nav {
-      list-style-type: none;
-    }
-    
-    header.sidebar li {
-      margin: 20px 0;
-    }
-    
-    header.sidebar a {
-      color: #fff;
-      text-decoration: none;
-      font-size: 18px;
-      display: block;
-      padding: 10px 20px;
-      transition: background 0.3s ease;
-    }
-    
-    header.sidebar a:hover {
-      background-color: #555;
-      border-radius: 5px;
-    }
-    
-    /* Logo styling */
-    .logo img {
-        width: 100px;
-        height: 100px;
-        border-radius: 50%;
-        object-fit: cover;
-        margin-bottom: 20px;
-    }
-    
-    /* Header styling */
-    
-    h2,
-    h3 {
-      margin: 20px;
-      margin-left: 220px;
-      font-size: 24px;
-    }
-    
-    /* Users section styling */
-    .users {
-        margin-left: 220px; /* Space for sidebar */
-        padding: 20px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-    
-    .users img {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        object-fit: cover;
-    }
-    
-    .users label {
-        font-size: 18px;
-        font-weight: bold;
-        color: #333;
-    }
-    
-    /* Additional styling */
-    a {
-        transition: 0.3s ease;
-    }
-    
-    a:hover {
-        opacity: 0.8;
-    }
-    .logo {
-        text-align: center; /* Center the logo horizontally in its container */
-      }
-      
-      .logo img {
-        margin-right: 10px; /* Space between image and label */
-        width: 100px;
-        height: 100px;
-        border-radius: 50%;
-      }
+/* Basic reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  color: #333;
+  padding: 0;
+  margin: 0;
+}
+
+/* Sidebar styling */
+header.sidebar {
+  background-color: #333;
+  width: 200px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding: 20px 0;
+}
+
+header.sidebar nav {
+  list-style-type: none;
+}
+
+header.sidebar li {
+  margin: 20px 0;
+}
+
+header.sidebar a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 18px;
+  display: block;
+  padding: 10px 20px;
+  transition: background 0.3s ease;
+}
+
+header.sidebar a:hover {
+  background-color: #555;
+  border-radius: 5px;
+}
+/* Main content area */
+body {
+  margin-left: 250px; /* Adjust based on sidebar width */
+  padding: 20px;
+}
+
+.head {
+  margin-bottom: 20px;
+}
+
+.head h2 {
+  font-size: 24px;
+  color: #333;
+}
+
+/* User list styling */
+.users {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.user {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  width: calc(33.333% - 20px);
+  padding: 15px;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.user img {
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+}
+
+/* Label styling */
+.user label {
+  display: block;
+  margin-top: 10px;
+  font-size: 16px;
+  color: #333;
+  font-weight: bold;
+  text-align: center;
+  padding: 5px;
+  border-radius: 5px;
+  text-decoration: none; /* Ensure no underline effect */
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.user label:hover {
+  background-color: #f4f4f4;
+  color: #007bff;
+  cursor: pointer;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  body {
+    margin-left: 0;
+  }
+
+  header.sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+
+  .users {
+    flex-direction: column;
+  }
+
+  .user {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+}
+.logo {
+  text-align: center; /* Center the logo horizontally in its container */
+}
+
+.logo img {
+  margin-right: 10px; /* Space between image and label */
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+}
