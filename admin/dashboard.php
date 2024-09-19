@@ -59,6 +59,7 @@ $traffic_stmt->close();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/dashboard.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="../image/local_image/logo.png" rel="icon">
     <title>Dashboard</title>
 </head>
 <body>

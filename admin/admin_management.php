@@ -55,6 +55,7 @@ $result = $stmt->get_result();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Management</title>
     <link rel="stylesheet" href="css/admin_managment.css">
+    <link href="../image/local_image/logo.png" rel="icon">
     <style>
         /* Basic modal styling */
     

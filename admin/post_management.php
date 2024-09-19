@@ -74,6 +74,7 @@ mysqli_close($conn);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <link rel="stylesheet" href="css/post_management.css"> <!-- Link to your CSS -->
+    <link href="../image/local_image/logo.png" rel="icon">
 </head>
 <body>
 <header class="sidebar">
