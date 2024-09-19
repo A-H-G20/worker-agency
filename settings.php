@@ -92,6 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <li><a href="contact.php">Chat</a></li>
                 <li><a href="profile.php">Profile</a></li>
                 <li><a href="settings.php">Settings</a></li>
+                
                 <li><a href="logout.php">Logout</a></li>
            
         </nav>
