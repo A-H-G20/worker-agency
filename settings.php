@@ -11,6 +11,15 @@ if (!isset($_SESSION['user_id'])) {
 $user_id = $_SESSION['user_id'];
 $error_message = "";
 
+// Fetch user details from the database
+$query_profile = "SELECT profile, username, email FROM users WHERE id = ?";
+$stmt_profile = mysqli_prepare($conn, $query_profile);
+mysqli_stmt_bind_param($stmt_profile, 'i', $user_id);
+mysqli_stmt_execute($stmt_profile);
+mysqli_stmt_bind_result($stmt_profile, $profile_image, $username, $email);
+mysqli_stmt_fetch($stmt_profile);
+mysqli_stmt_close($stmt_profile);
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Retrieve and sanitize form inputs
     $old_password = $_POST['old_password'];
@@ -60,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Change Password</title>
+    <title>Profile</title>
     <link rel="stylesheet" href="css/settings.css"> <!-- Include your CSS file -->
     <link href="image/local_image/logo.png" rel="icon">
 </head>
@@ -69,19 +78,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <header class="sidebar">
         <nav>
             <div class="logo">
-                <?php if (!empty($data['profile'])): ?>
-                    <img src="image/<?php echo htmlspecialchars($data['profile']); ?>" alt="Profile Image" />
+                <?php if (!empty($profile_image)): ?>
+                    <img src="image/<?php echo htmlspecialchars($profile_image); ?>" alt="Profile Image" />
                 <?php else: ?>
                     <p>No profile image available.</p>
                 <?php endif; ?>
             </div>
-            <li><a href="dashboard.php">Dashboard</a></li>
-            <li><a href="add_friends.php">Add Friends</a></li>
-            <li><a href="user_friend.php">My Friends</a></li>
-            <li><a href="contact.php">chat</a></li>
-            <li><a href="profile.php">profile</a></li>
-            <li><a href="settings.php">Setting</a></li>
-            <li><a href="logout.php">Logout</a></li>
+          
+            
+                <li><a href="dashboard.php">Dashboard</a></li>
+                <li><a href="add_friends.php">Add Friends</a></li>
+                <li><a href="user_friend.php">My Friends</a></li>
+                <li><a href="contact.php">Chat</a></li>
+                <li><a href="profile.php">Profile</a></li>
+                <li><a href="settings.php">Settings</a></li>
+                <li><a href="logout.php">Logout</a></li>
+           
         </nav>
     </header>
 
