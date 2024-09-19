@@ -423,4 +423,67 @@
   }
   
 
-  
+  .user-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Distribute space between items */
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    max-width: 700px;
+    margin-left: 520px;
+}
+
+.user-info div {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.user-info .profile-section {
+    display: flex;
+    align-items: center;
+}
+
+.user-info img {
+    margin-right: 10px; /* Space between image and label */
+        width: 130px;
+        height: 100px;
+        border-radius: 50%;
+}
+
+.user-info .name-section {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-info .name-label {
+    font-weight: bold;
+    font-size: 18px;
+    color: #333;
+}
+
+.user-info .count-friends {
+    font-size: 16px;
+    color: #007bff;
+    font-weight: bold;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .user-info {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .user-info .profile-section {
+        margin-right: 10px; /* Space between image and label */
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+    }
+}
+.no-underline {
+    text-decoration: none;
+}

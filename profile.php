@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_post'])) {
 }
 
 // Fetch user details for the sidebar
-$query_user = "SELECT profile, name FROM users WHERE id = ?";
+$query_user = "SELECT profile, name, count_frnd FROM users WHERE id = ?";
 $stmt = mysqli_prepare($conn, $query_user);
 if (!$stmt) {
     echo 'Error preparing the query: ' . mysqli_error($conn);
@@ -109,7 +109,6 @@ mysqli_close($conn);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/profile.css">
     <title>Profile</title>
-  
 </head>
 <body>
 <header class="sidebar">
@@ -122,18 +121,34 @@ mysqli_close($conn);
             <?php endif; ?>
         </div>
         <li><a href="dashboard.php">Dashboard</a></li>
-            <li><a href="add_friends.php">Add Friends</a></li>
-            <li><a href="contact.php">chat</a></li>
-            <li><a href="profile.php">profile</a></li>
-            <li><a href="settings.php">Setting</a></li>
-            <li><a href="logout.php">Logout</a></li>
+        <li><a href="add_friends.php">Add Friends</a></li>
+        <li><a href="contact.php">Chat</a></li>
+        <li><a href="profile.php">Profile</a></li>
+        <li><a href="settings.php">Settings</a></li>
+        <li><a href="logout.php">Logout</a></li>
     </nav>
 </header>
 
 <div class="header-container">
     <h2>Profile</h2>
-    <button class="add" onclick="window.location.href='edit.php';">Edit info</button>
+    <button class="add" onclick="window.location.href='edit.php';">Edit Info</button>
 </div>
+<form action="" class="user-info">
+    <div class="profile-section">
+        <?php if (!empty($data['profile'])): ?>
+            <img src="image/<?php echo htmlspecialchars($data['profile']); ?>" alt="Profile Image" />
+        <?php else: ?>
+            <p>No profile image available.</p>
+        <?php endif; ?>
+        <div class="name-section">
+            <label class="name-label"><?php echo htmlspecialchars($data['name']); ?></label>
+        </div>
+    </div>
+    <a href="friend.php" class="no-underline">
+    <label class="count-friends"><?php echo htmlspecialchars($data['count_frnd']); ?> Friends</label>
+</a>
+
+</form>
 
 <br><br><br>
 
