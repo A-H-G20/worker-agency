@@ -48,11 +48,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $gender = $_POST['gender'];
 
     // Handle file upload for profile picture
-    $profile = $user['profile']; // Default to existing picture
-    if (isset($_FILES['profile']) && $_FILES['profile']['error'] == 0) {
-        $profile = 'uploads/' . basename($_FILES['profile']['name']);
-        move_uploaded_file($_FILES['profile']['tmp_name'], $profile); // Fixed the variable name
-    }
+   // Handle file upload for profile picture
+$profile = $user['profile']; // Default to existing picture
+if (isset($_FILES['profile']) && $_FILES['profile']['error'] == 0) {
+    $uploadedFileName = basename($_FILES['profile']['name']); // Extract the file name only
+    $profile = $uploadedFileName; // Save only the file name in the database
+    move_uploaded_file($_FILES['profile']['tmp_name'], 'image/' . $uploadedFileName); // Save the file to the server
+}
+
 
     // Update the user's information in the database
     $update_query = "UPDATE users SET name = ?, category = ?, profile = ?, phone_number = ?, address = ?, date_of_birth = ?, gender = ? WHERE id = ?";
@@ -66,8 +69,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt->bind_param('sssssssi', $name, $category, $profile, $phone_number, $address, $date_of_birth, $gender, $user_id);
 
     if ($stmt->execute()) {
-
         header("location: edit_info.php");
+        exit(); // Make sure to exit after redirect
     } else {
         $error_msg = "Error updating information: " . $stmt->error;
     }
@@ -96,17 +99,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
 
     <?php if ($success_msg): ?>
-        <div class="success-msg"><?= $success_msg ?></div>
+        <div class="success-msg"><?= htmlspecialchars($success_msg) ?></div>
     <?php endif; ?>
     <?php if ($error_msg): ?>
-        <div class="error-msg"><?= $error_msg ?></div>
+        <div class="error-msg"><?= htmlspecialchars($error_msg) ?></div>
     <?php endif; ?>
 
     <form action="" method="POST" enctype="multipart/form-data" class="edit-info">
 
         <div class="user-info">
             <label for="name">Full Name:</label>
-            <input type="text" name="name" required value="<?= $user['name'] ?>" placeholder="Full Name">
+            <input type="text" name="name" required value="<?= htmlspecialchars($user['name']) ?>" placeholder="Full Name">
 
             <label for="category">Category:</label>
             <select id="category" name="category" required>
@@ -119,13 +122,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <input type="file" name="profile" placeholder="Profile">
 
             <label for="phone_number">Phone Number:</label>
-            <input type="text" name="phone_number" required value="<?= $user['phone_number'] ?>" placeholder="Phone Number">
+            <input type="text" name="phone_number" required value="<?= htmlspecialchars($user['phone_number']) ?>" placeholder="Phone Number">
 
             <label for="address">Address:</label>
-            <input type="text" name="address" required value="<?= $user['address'] ?>" placeholder="Address">
+            <input type="text" name="address" required value="<?= htmlspecialchars($user['address']) ?>" placeholder="Address">
 
             <label for="date_of_birth">Date of Birth:</label>
-            <input type="text" name="date_of_birth" required value="<?= $user['date_of_birth'] ?>" placeholder="Date of Birth">
+            <input type="text" name="date_of_birth" required value="<?= htmlspecialchars($user['date_of_birth']) ?>" placeholder="Date of Birth">
 
             <label for="gender">Gender:</label>
             <select id="gender" name="gender" required>

@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $date_of_birth = $_POST['date_of_birth'];
     $phone_number = $_POST['phone_number'];
     $password = $_POST['password'];
-    $profile = 'image/local_image/images.png'; // Set default profile image
+    $profile = 'images.png'; // Set default profile image
     $role = 'user';
     $mail = new PHPMailer(true);
 
