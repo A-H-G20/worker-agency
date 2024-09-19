@@ -132,7 +132,7 @@ mysqli_close($conn);
 
 <div class="header-container">
     <h2>Profile</h2>
-    <button class="add" onclick="window.location.href='edit.php';">Edit Info</button>
+    <button class="add" onclick="window.location.href='edit_info.php';">Edit Info</button>
 </div>
 <form action="" class="user-info">
     <div class="profile-section">

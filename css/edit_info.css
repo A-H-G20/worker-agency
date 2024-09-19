@@ -1,0 +1,129 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+/* Head Section */
+.head {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #007bff;
+    color: #fff;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.head h2 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.return-home img {
+    width: 30px;
+    height: 30px;
+    
+}
+
+/* Form Styles */
+form.edit-info {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px;
+    box-sizing: border-box;
+    margin-bottom: 110px; /* Maintain space for the fixed head */
+}
+
+/* Centering Form in the middle */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding-top: 80px; /* Space for header */
+}
+
+.img img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    display: block;
+    margin: 0 auto;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.user-info label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.user-info input,
+.user-info select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.user-info input:focus,
+.user-info select:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+.button {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.button button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.button button:hover {
+    background-color: #0056b3;
+}
+
+@media (max-width: 600px) {
+    form.edit-info {
+        padding: 15px;
+    }
+
+    .user-info {
+        gap: 8px;
+    }
+
+    .button button {
+        font-size: 14px;
+    }
+}
