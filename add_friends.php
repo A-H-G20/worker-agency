@@ -43,37 +43,11 @@ if (!$data) {
 // Close the statement
 mysqli_stmt_close($stmt);
 
-// Fetch all posts (public posts)
-$query_all_posts = "
-    SELECT u.profile, u.name, p.post_id, p.user_post, p.create_at,
-           (SELECT COUNT(*) FROM comments c WHERE c.post_id = p.post_id) AS comment_count
-    FROM users u
-    JOIN post p ON u.id = p.user_id
-";
-
-$result_all_posts = mysqli_query($conn, $query_all_posts);
-if (!$result_all_posts) {
-    echo 'Error fetching posts: ' . mysqli_error($conn);
-    exit();
-}
-
-$posts = [];
-while ($row = mysqli_fetch_assoc($result_all_posts)) {
-    $posts[] = $row;
-}
-
-// Close the connection
-mysqli_close($conn);
-// Fetch all users except the logged-in user
-require 'config.php';
-
-$user_id = $_SESSION['user_id'];
-
-// Fetch all users except the logged-in user
+// Fetch all users with the role of 'user', excluding the logged-in user
 $query_all_users = "
     SELECT id, profile, name
     FROM users
-    WHERE id != ?
+    WHERE role = 'user' AND id != ?
 ";
 $stmt = $conn->prepare($query_all_users);
 $stmt->bind_param('i', $user_id);
@@ -109,7 +83,7 @@ $conn->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Add Friends</title>
     <link rel="stylesheet" href="css/friends.css">
     <link href="image/local_image/logo.png" rel="icon">
 </head>
@@ -127,9 +101,9 @@ $conn->close();
             <li><a href="dashboard.php">Dashboard</a></li>
             <li><a href="add_friends.php">Add Friends</a></li>
             <li><a href="user_friend.php">My Friends</a></li>
-            <li><a href="contact.php">chat</a></li>
-            <li><a href="profile.php">profile</a></li>
-            <li><a href="settings.php">Setting</a></li>
+            <li><a href="contact.php">Chat</a></li>
+            <li><a href="profile.php">Profile</a></li>
+            <li><a href="settings.php">Settings</a></li>
             <li><a href="logout.php">Logout</a></li>
         </nav>
     </header>
@@ -162,10 +136,7 @@ $conn->close();
 
 </html>
 
-
 <?php
-
-
 require 'config.php'; // Ensure database connection is established
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -182,14 +153,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $stmt->bind_param('ii', $user_id, $friend_id);
             $stmt->execute();
 
-            // Optionally, you might want to update some count or other related data in the users table
-            // Example: Increase friend count (if applicable)
-            $stmt = $conn->prepare("UPDATE users SET count_frnd= count_frnd + 1 WHERE id = ?");
+            // Optionally, update friend count
+            $stmt = $conn->prepare("UPDATE users SET count_frnd = count_frnd + 1 WHERE id = ?");
             $stmt->bind_param('i', $user_id);
             $stmt->execute();
 
-            // Redirect back to the friends page (or any other desired page)
-            echo "The friends added";
+            // Redirect back to the friends page
             header("Location: add_friends.php");
             exit();
         } else {
@@ -198,6 +167,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } else {
         echo "You must be logged in to add friends.";
     }
-    exit(); // Make sure to exit after processing POST requests
+    exit(); // Ensure the script exits after processing POST requests
 }
 ?>
