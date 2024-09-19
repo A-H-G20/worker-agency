@@ -1,32 +1,13 @@
-<link rel="stylesheet" href="css\verify.css">
-<link href="img\log.png" rel="icon">
+<link rel="stylesheet" href="css/verify.css">
+<link href="image/local_image/logo.png" rel="icon">
 <div class="container">
-    <div class="margin-top">
-        <div class="row">
-            <div class="span12">
-                <img src="img/dr.jpg" onclick="window.location.href='index.php';">
-
-
-                <hr>
-            </div>
-            <div class="span12">
-
-
-                <div class="signup_container">
-
-                </div>
-
-            </div>
-
-
-        </div>
-    </div>
+    <img src="image/local_image/logo.png" alt="Logo" onclick="window.location.href='index.php';">
+    <form method="POST">
+        <input type="hidden" name="email" value="<?php echo isset($_GET['email']) ? htmlspecialchars($_GET['email']) : ''; ?>">
+        <input type="text" name="verification_code" placeholder="Enter verification code" required />
+        <input type="submit" name="verify_email" value="Verify Email">
+    </form>
 </div>
-<form method="POST">
-    <input type="hidden" name="email" value="<?php echo isset($_GET['email']) ? htmlspecialchars($_GET['email']) : ''; ?>">
-    <input type="text" name="verification_code" placeholder="Enter verification code" required />
-    <input type="submit" name="verify_email" value="Verify Email">
-</form>
 
 <?php
 include('config.php');
@@ -42,6 +23,4 @@ if (isset($_POST["verify_email"])) {
     header("Location: login.php");
     exit();
 }
-
-
 ?>

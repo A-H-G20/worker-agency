@@ -1,0 +1,97 @@
+/* General body styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f6f9;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Centering the container */
+.container {
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+    margin: auto;
+}
+
+/* Image styling */
+img {
+    width: 120px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Styling for the form */
+form {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+input[type="text"],
+input[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+}
+
+/* Styling for the verification code input */
+input[type="text"] {
+    background-color: #f9f9f9;
+}
+
+/* Button styling */
+input[type="submit"] {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+input[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+/* Success and error message styling */
+.success-msg {
+    color: green;
+    margin-top: 15px;
+}
+
+.error-msg {
+    color: red;
+    margin-top: 15px;
+}
+
+/* Mobile responsive */
+@media (max-width: 600px) {
+    .container {
+        padding: 20px;
+    }
+
+    img {
+        width: 100px;
+    }
+
+    form {
+        padding: 20px;
+    }
+
+    input[type="text"],
+    input[type="submit"] {
+        font-size: 14px;
+    }
+}

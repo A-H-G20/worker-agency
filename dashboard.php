@@ -73,6 +73,7 @@ mysqli_close($conn);
 <head>
     <title>Dashboard</title>
     <link rel="stylesheet" href="css/dashboard.css">
+    <link href="image/local_image/logo.png" rel="icon">
 </head>
 
 <body>
@@ -100,7 +101,7 @@ mysqli_close($conn);
             <h2>Dashboard</h2>
             <button class="add">Add post</button>
         </div>
- 
+
         <div class="add-post-container">
             <div class="add-post" id="add-post-form" style="display: none;">
                 <form method="post" enctype="multipart/form-data">
@@ -273,4 +274,3 @@ if ($error_message) {
 }
 ob_end_flush();
 ?>
-

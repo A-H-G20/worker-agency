@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                 // Redirect based on role
                 if ($role == 'admin') {
-                    header("Location: home.php");
+                    header("Location: admin/dashboard.php");
                 } else {
                     // For regular users, check if verified
                     if ($verified == 1) {
@@ -57,12 +57,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <title>Login</title>
     <link rel="stylesheet" href="css/login.css">
+    <link href="image/local_image/logo.png" rel="icon">
 </head>
 
 <body>
     <div class="login-container">
         <div class="logo">
-            <img src="image/logo.png" alt="Logo">
+            <img src="image/local_image/logo.png" alt="Logo">
         </div>
         <h2>Welcome Back</h2>
         <form method="POST">

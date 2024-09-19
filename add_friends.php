@@ -111,12 +111,13 @@ $conn->close();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="css/friends.css">
+    <link href="image/local_image/logo.png" rel="icon">
 </head>
 
 <body>
     <header class="sidebar">
         <nav>
-        <div class="logo">
+            <div class="logo">
                 <?php if (!empty($data['profile'])): ?>
                     <img src="image/<?php echo htmlspecialchars($data['profile']); ?>" alt="Profile Image" />
                 <?php else: ?>

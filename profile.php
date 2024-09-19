@@ -104,126 +104,130 @@ mysqli_close($conn);
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/profile.css">
+    <link href="image/local_image/logo.png" rel="icon">
     <title>Profile</title>
 </head>
+
 <body>
-<header class="sidebar">
-    <nav>
-        <div class="logo">
+    <header class="sidebar">
+        <nav>
+            <div class="logo">
+                <?php if (!empty($data['profile'])): ?>
+                    <img src="image/<?php echo htmlspecialchars($data['profile']); ?>" alt="Profile Image" />
+                <?php else: ?>
+                    <p>No profile image available.</p>
+                <?php endif; ?>
+            </div>
+            <li><a href="dashboard.php">Dashboard</a></li>
+            <li><a href="add_friends.php">Add Friends</a></li>
+            <li><a href="user_friend.php">My Friends</a></li>
+            <li><a href="contact.php">Chat</a></li>
+            <li><a href="profile.php">Profile</a></li>
+            <li><a href="settings.php">Settings</a></li>
+            <li><a href="logout.php">Logout</a></li>
+        </nav>
+    </header>
+
+    <div class="header-container">
+        <h2>Profile</h2>
+        <button class="add" onclick="window.location.href='edit_info.php';">Edit Info</button>
+    </div>
+    <form action="" class="user-info">
+        <div class="profile-section">
             <?php if (!empty($data['profile'])): ?>
                 <img src="image/<?php echo htmlspecialchars($data['profile']); ?>" alt="Profile Image" />
             <?php else: ?>
                 <p>No profile image available.</p>
             <?php endif; ?>
-        </div>
-        <li><a href="dashboard.php">Dashboard</a></li>
-        <li><a href="add_friends.php">Add Friends</a></li>
-        <li><a href="user_friend.php">My Friends</a></li>
-        <li><a href="contact.php">Chat</a></li>
-        <li><a href="profile.php">Profile</a></li>
-        <li><a href="settings.php">Settings</a></li>
-        <li><a href="logout.php">Logout</a></li>
-    </nav>
-</header>
-
-<div class="header-container">
-    <h2>Profile</h2>
-    <button class="add" onclick="window.location.href='edit_info.php';">Edit Info</button>
-</div>
-<form action="" class="user-info">
-    <div class="profile-section">
-        <?php if (!empty($data['profile'])): ?>
-            <img src="image/<?php echo htmlspecialchars($data['profile']); ?>" alt="Profile Image" />
-        <?php else: ?>
-            <p>No profile image available.</p>
-        <?php endif; ?>
-        <div class="name-section">
-            <label class="name-label"><?php echo htmlspecialchars($data['name']); ?></label>
-        </div>
-    </div>
-    <a href="user_friend.php" class="no-underline">
-    <label class="count-friends"><?php echo htmlspecialchars($data['count_frnd']); ?> Friends</label>
-</a>
-
-</form>
-
-<br><br><br>
-
-<?php if (!empty($posts)): ?>
-    <?php foreach ($posts as $post): ?>
-        <div class="full-post">
-            <div class="profile">
-                <?php if (!empty($post['profile'])): ?>
-                    <img src="image/<?php echo htmlspecialchars($post['profile']); ?>" alt="Profile Image" />
-                <?php else: ?>
-                    <p>No profile image available.</p>
-                <?php endif; ?>
-                <div class="post-info">
-                    <label><?php echo htmlspecialchars($post['name']); ?></label>
-                    <data value="<?php echo htmlspecialchars($post['create_at']); ?>"><?php echo htmlspecialchars($post['create_at']); ?></data>
-                    <img class="options" src="image/icons/options.png" alt="Options" onclick="togglePopup(<?php echo htmlspecialchars($post['post_id']); ?>)">
-                </div>
+            <div class="name-section">
+                <label class="name-label"><?php echo htmlspecialchars($data['name']); ?></label>
             </div>
+        </div>
+        <a href="user_friend.php" class="no-underline">
+            <label class="count-friends"><?php echo htmlspecialchars($data['count_frnd']); ?> Friends</label>
+        </a>
 
-            <div id="popup-<?php echo htmlspecialchars($post['post_id']); ?>" class="popup" style="display:none;">
-                <div class="popup-content">
-                    <button onclick="deletePost(<?php echo htmlspecialchars($post['post_id']); ?>)">Delete</button>
-                    <button onclick="togglePopup(<?php echo htmlspecialchars($post['post_id']); ?>)">Cancel</button>
-                </div>
-            </div>
+    </form>
 
-            <div class="post">
-                <?php
-                $postPath = 'image/' . htmlspecialchars($post['user_post']);
-                $fileExtension = pathinfo($postPath, PATHINFO_EXTENSION);
-                $allowedImageTypes = ['jpg', 'jpeg', 'png', 'gif'];
-                $allowedVideoTypes = ['mp4', 'webm', 'ogg'];
+    <br><br><br>
 
-                if (!empty($post['user_post'])):
-                    if (in_array($fileExtension, $allowedImageTypes)): ?>
-                        <img src="<?php echo $postPath; ?>" alt="Post Image" />
-                    <?php elseif (in_array($fileExtension, $allowedVideoTypes)): ?>
-                        <video controls>
-                            <source src="<?php echo $postPath; ?>" type="video/<?php echo $fileExtension; ?>">
-                            Your browser does not support the video tag.
-                        </video>
+    <?php if (!empty($posts)): ?>
+        <?php foreach ($posts as $post): ?>
+            <div class="full-post">
+                <div class="profile">
+                    <?php if (!empty($post['profile'])): ?>
+                        <img src="image/<?php echo htmlspecialchars($post['profile']); ?>" alt="Profile Image" />
                     <?php else: ?>
-                        <p>Unsupported file type.</p>
+                        <p>No profile image available.</p>
                     <?php endif; ?>
-                <?php else: ?>
-                    <p>No post available.</p>
-                <?php endif; ?>
-            </div>
-
-            <div class="like-cmnts">
-                <div class="buttons">
-                    <a href="comments.php?post_id=<?php echo htmlspecialchars($post['post_id']); ?>">
-                        <button class="comments">
-                            <img src="image/icons/coment.png" alt="Comments" />
-                        </button>
-                    </a>
+                    <div class="post-info">
+                        <label><?php echo htmlspecialchars($post['name']); ?></label>
+                        <data value="<?php echo htmlspecialchars($post['create_at']); ?>"><?php echo htmlspecialchars($post['create_at']); ?></data>
+                        <img class="options" src="image/icons/options.png" alt="Options" onclick="togglePopup(<?php echo htmlspecialchars($post['post_id']); ?>)">
+                    </div>
                 </div>
-                <div class="count">
-                    <label for="count-comments" class="count-label">
-                        <span id="count-comments"><?php echo htmlspecialchars($post['comment_count']); ?></span> Comments
-                    </label>
+
+                <div id="popup-<?php echo htmlspecialchars($post['post_id']); ?>" class="popup" style="display:none;">
+                    <div class="popup-content">
+                        <button onclick="deletePost(<?php echo htmlspecialchars($post['post_id']); ?>)">Delete</button>
+                        <button onclick="togglePopup(<?php echo htmlspecialchars($post['post_id']); ?>)">Cancel</button>
+                    </div>
+                </div>
+
+                <div class="post">
+                    <?php
+                    $postPath = 'image/' . htmlspecialchars($post['user_post']);
+                    $fileExtension = pathinfo($postPath, PATHINFO_EXTENSION);
+                    $allowedImageTypes = ['jpg', 'jpeg', 'png', 'gif'];
+                    $allowedVideoTypes = ['mp4', 'webm', 'ogg'];
+
+                    if (!empty($post['user_post'])):
+                        if (in_array($fileExtension, $allowedImageTypes)): ?>
+                            <img src="<?php echo $postPath; ?>" alt="Post Image" />
+                        <?php elseif (in_array($fileExtension, $allowedVideoTypes)): ?>
+                            <video controls>
+                                <source src="<?php echo $postPath; ?>" type="video/<?php echo $fileExtension; ?>">
+                                Your browser does not support the video tag.
+                            </video>
+                        <?php else: ?>
+                            <p>Unsupported file type.</p>
+                        <?php endif; ?>
+                    <?php else: ?>
+                        <p>No post available.</p>
+                    <?php endif; ?>
+                </div>
+
+                <div class="like-cmnts">
+                    <div class="buttons">
+                        <a href="comments.php?post_id=<?php echo htmlspecialchars($post['post_id']); ?>">
+                            <button class="comments">
+                                <img src="image/icons/coment.png" alt="Comments" />
+                            </button>
+                        </a>
+                    </div>
+                    <div class="count">
+                        <label for="count-comments" class="count-label">
+                            <span id="count-comments"><?php echo htmlspecialchars($post['comment_count']); ?></span> Comments
+                        </label>
+                    </div>
                 </div>
             </div>
-        </div>
-    <?php endforeach; ?>
-<?php else: ?>
-    <p>No posts available.</p>
-<?php endif; ?>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <p>No posts available.</p>
+    <?php endif; ?>
 
-<!-- Hidden Form for Deleting Posts -->
-<form id="delete-post-form" method="POST" action="profile.php" style="display:none;">
-    <input type="hidden" name="post_id">
-    <input type="hidden" name="delete_post" value="1">
-</form>
-<script src="js/profile.js"></script>
+    <!-- Hidden Form for Deleting Posts -->
+    <form id="delete-post-form" method="POST" action="profile.php" style="display:none;">
+        <input type="hidden" name="post_id">
+        <input type="hidden" name="delete_post" value="1">
+    </form>
+    <script src="js/profile.js"></script>
 </body>
+
 </html>

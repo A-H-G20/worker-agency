@@ -56,14 +56,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Change Password</title>
     <link rel="stylesheet" href="css/settings.css"> <!-- Include your CSS file -->
+    <link href="image/local_image/logo.png" rel="icon">
 </head>
+
 <body>
-<header class="sidebar">
+    <header class="sidebar">
         <nav>
             <div class="logo">
                 <?php if (!empty($data['profile'])): ?>
@@ -82,25 +85,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </nav>
     </header>
 
-<form method="POST" action="">
-    <div class="input-pass">
-        <input type="password" name="old_password" required placeholder="Old Password">
-        <input type="password" name="new_password" required placeholder="New Password">
-        <input type="password" name="confirm_password" required placeholder="Confirm Password">
-    </div>
-    <div class="button">
-        <button type="submit">Confirm</button>
-    </div>
-    <?php if (!empty($error_message)): ?>
-        <div class="error-message">
-            <?php echo htmlspecialchars($error_message); ?>
+    <form method="POST" action="">
+        <div class="input-pass">
+            <input type="password" name="old_password" required placeholder="Old Password">
+            <input type="password" name="new_password" required placeholder="New Password">
+            <input type="password" name="confirm_password" required placeholder="Confirm Password">
         </div>
-    <?php elseif (!empty($success_message)): ?>
-        <div class="success-message">
-            <?php echo htmlspecialchars($success_message); ?>
+        <div class="button">
+            <button type="submit">Confirm</button>
         </div>
-    <?php endif; ?>
-</form>
+        <?php if (!empty($error_message)): ?>
+            <div class="error-message">
+                <?php echo htmlspecialchars($error_message); ?>
+            </div>
+        <?php elseif (!empty($success_message)): ?>
+            <div class="success-message">
+                <?php echo htmlspecialchars($success_message); ?>
+            </div>
+        <?php endif; ?>
+    </form>
 
 </body>
+
 </html>

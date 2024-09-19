@@ -92,13 +92,15 @@ mysqli_close($conn);
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/chat.css">
+    <link href="image/local_image/logo.png" rel="icon">
     <title>Chat with <?php echo htmlspecialchars($chat_user['name']); ?></title>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const chatWithUserId = <?php echo json_encode($chat_with_user_id); ?>;
             const chatMessagesElement = document.querySelector('.chat-messages');
             const messageForm = document.querySelector('form');
@@ -114,7 +116,9 @@ mysqli_close($conn);
 
                             data.forEach(message => {
                                 const messageDate = new Date(message.created_at).toLocaleDateString();
-                                const dayOfWeek = new Date(message.created_at).toLocaleDateString('en-US', { weekday: 'long' });
+                                const dayOfWeek = new Date(message.created_at).toLocaleDateString('en-US', {
+                                    weekday: 'long'
+                                });
 
                                 if (messageDate !== lastDate) {
                                     const dateHeader = document.createElement('div');
@@ -144,34 +148,35 @@ mysqli_close($conn);
             // Fetch messages every 3 seconds
             setInterval(fetchMessages, 3000);
 
-            messageForm.addEventListener('submit', function (event) {
+            messageForm.addEventListener('submit', function(event) {
                 event.preventDefault();
                 const formData = new FormData(messageForm);
                 fetch('send_message.php', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.text())
-                .then(() => {
-                    messageInput.value = '';
-                    fetchMessages(); // Fetch new messages after sending
-                })
-                .catch(error => console.error('Error sending message:', error));
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.text())
+                    .then(() => {
+                        messageInput.value = '';
+                        fetchMessages(); // Fetch new messages after sending
+                    })
+                    .catch(error => console.error('Error sending message:', error));
             });
 
             fetchMessages(); // Initial fetch of messages
         });
     </script>
 </head>
+
 <body>
- <div class="chat-container">
-      
- <div class="chat-header">
-    <a href="contact.php" class="back-link">
-        <img src="image/icons/back.png "alt="Back to Content" class="back-image">
-    </a>
-    <span class="chat-header-name"><?php echo htmlspecialchars($chat_user['name']); ?></span>
-</div>
+    <div class="chat-container">
+
+        <div class="chat-header">
+            <a href="contact.php" class="back-link">
+                <img src="image/icons/back.png " alt="Back to Content" class="back-image">
+            </a>
+            <span class="chat-header-name"><?php echo htmlspecialchars($chat_user['name']); ?></span>
+        </div>
 
         <div class="chat-messages">
             <!-- Messages will be injected here by JavaScript -->
@@ -185,4 +190,5 @@ mysqli_close($conn);
         </div>
     </div>
 </body>
+
 </html>

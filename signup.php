@@ -1,4 +1,3 @@
-
 <?php
 session_start();
 require 'config.php'; // Include the DB connection
@@ -50,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $date_of_birth = $_POST['date_of_birth'];
     $phone_number = $_POST['phone_number'];
     $password = $_POST['password'];
-    $profile = 'images.png'; // Set default profile image
+    $profile = 'image/local_image/images.png'; // Set default profile image
     $role = 'user';
     $mail = new PHPMailer(true);
 
@@ -134,12 +133,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <title>Register</title>
     <link rel="stylesheet" href="css/signup.css">
+    <link href="image/local_image/logo.png" rel="icon">
 </head>
 
 <body>
     <div class="container">
         <div class="logo">
-            <img src="image/logo.png" alt="Logo">
+            <img src="image/local_image/logo.png" alt="Logo">
         </div>
         <h1>Register Now</h1>
         <form method="POST" action="">

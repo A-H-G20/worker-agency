@@ -72,6 +72,7 @@ $conn->close();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Friends List</title>
     <link rel="stylesheet" href="css/friends.css">
+    <link href="image/local_image/logo.png" rel="icon">
 </head>
 
 <body>
