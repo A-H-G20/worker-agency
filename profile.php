@@ -122,6 +122,7 @@ mysqli_close($conn);
         </div>
         <li><a href="dashboard.php">Dashboard</a></li>
         <li><a href="add_friends.php">Add Friends</a></li>
+        <li><a href="user_friend.php">My Friends</a></li>
         <li><a href="contact.php">Chat</a></li>
         <li><a href="profile.php">Profile</a></li>
         <li><a href="settings.php">Settings</a></li>
