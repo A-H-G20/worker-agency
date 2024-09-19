@@ -144,7 +144,7 @@ mysqli_close($conn);
             <label class="name-label"><?php echo htmlspecialchars($data['name']); ?></label>
         </div>
     </div>
-    <a href="friend.php" class="no-underline">
+    <a href="user_friend.php" class="no-underline">
     <label class="count-friends"><?php echo htmlspecialchars($data['count_frnd']); ?> Friends</label>
 </a>
 
