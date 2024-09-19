@@ -98,24 +98,7 @@ mysqli_close($conn);
             <h2>Dashboard</h2>
             <button class="add">Add post</button>
         </div>
-        <div class="story">
-            <div class="img">
-                <img src="image/logo.png" alt="">
-                <label for="">user1</label>
-            </div>
-            <div class="img">
-                <img src="image/logo.png" alt="">
-                <label for="">user2</label>
-            </div>
-            <div class="img">
-                <img src="image/logo.png" alt="">
-                <label for="">user3</label>
-            </div>
-            <div class="img">
-                <img src="image/logo.png" alt="">
-                <label for="">user4</label>
-            </div>
-        </div>
+ 
         <div class="add-post-container">
             <div class="add-post" id="add-post-form" style="display: none;">
                 <form method="post" enctype="multipart/form-data">

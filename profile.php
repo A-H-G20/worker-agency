@@ -12,13 +12,39 @@ require 'config.php';
 
 $user_id = $_SESSION['user_id'];
 
-// Fetch user details for the sidebar
-$query_user = "
-    SELECT profile, name
-    FROM users
-    WHERE id = ?
-";
+// Handle delete request
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_post'])) {
+    $post_id_to_delete = intval($_POST['post_id']);
 
+    // Delete comments related to the post
+    $query_delete_comments = "DELETE FROM comments WHERE post_id = ?";
+    $stmt_delete_comments = mysqli_prepare($conn, $query_delete_comments);
+    if ($stmt_delete_comments) {
+        mysqli_stmt_bind_param($stmt_delete_comments, 'i', $post_id_to_delete);
+        mysqli_stmt_execute($stmt_delete_comments);
+        mysqli_stmt_close($stmt_delete_comments);
+    } else {
+        echo 'Error preparing the delete comments query: ' . mysqli_error($conn);
+    }
+
+    // Delete the post
+    $query_delete_post = "DELETE FROM post WHERE post_id = ?";
+    $stmt_delete_post = mysqli_prepare($conn, $query_delete_post);
+    if ($stmt_delete_post) {
+        mysqli_stmt_bind_param($stmt_delete_post, 'i', $post_id_to_delete);
+        mysqli_stmt_execute($stmt_delete_post);
+        mysqli_stmt_close($stmt_delete_post);
+    } else {
+        echo 'Error preparing the delete post query: ' . mysqli_error($conn);
+    }
+
+    mysqli_close($conn);
+    header("Location: profile.php"); // Redirect to the profile page after deletion
+    exit();
+}
+
+// Fetch user details for the sidebar
+$query_user = "SELECT profile, name FROM users WHERE id = ?";
 $stmt = mysqli_prepare($conn, $query_user);
 if (!$stmt) {
     echo 'Error preparing the query: ' . mysqli_error($conn);
@@ -82,7 +108,8 @@ mysqli_close($conn);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/profile.css">
-    <title>Document</title>
+    <title>Profile</title>
+  
 </head>
 <body>
 <header class="sidebar">
@@ -102,10 +129,12 @@ mysqli_close($conn);
     </nav>
 </header>
 
-<div class="info">
-    <img src="profile" alt="">
-    <label for="name"><?php echo htmlspecialchars($data['name']); ?></label>
+<div class="header-container">
+    <h2>Profile</h2>
+    <button class="add" onclick="window.location.href='edit.php';">Edit info</button>
 </div>
+
+<br><br><br>
 
 <?php if (!empty($posts)): ?>
     <?php foreach ($posts as $post): ?>
@@ -116,9 +145,17 @@ mysqli_close($conn);
                 <?php else: ?>
                     <p>No profile image available.</p>
                 <?php endif; ?>
-                <div>
-                    <label for=""><?php echo htmlspecialchars($post['name']); ?></label>
+                <div class="post-info">
+                    <label><?php echo htmlspecialchars($post['name']); ?></label>
                     <data value="<?php echo htmlspecialchars($post['create_at']); ?>"><?php echo htmlspecialchars($post['create_at']); ?></data>
+                    <img class="options" src="image/icons/options.png" alt="Options" onclick="togglePopup(<?php echo htmlspecialchars($post['post_id']); ?>)">
+                </div>
+            </div>
+
+            <div id="popup-<?php echo htmlspecialchars($post['post_id']); ?>" class="popup" style="display:none;">
+                <div class="popup-content">
+                    <button onclick="deletePost(<?php echo htmlspecialchars($post['post_id']); ?>)">Delete</button>
+                    <button onclick="togglePopup(<?php echo htmlspecialchars($post['post_id']); ?>)">Cancel</button>
                 </div>
             </div>
 
@@ -165,5 +202,11 @@ mysqli_close($conn);
     <p>No posts available.</p>
 <?php endif; ?>
 
+<!-- Hidden Form for Deleting Posts -->
+<form id="delete-post-form" method="POST" action="profile.php" style="display:none;">
+    <input type="hidden" name="post_id">
+    <input type="hidden" name="delete_post" value="1">
+</form>
+<script src="js/profile.js"></script>
 </body>
 </html>
