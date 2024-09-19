@@ -64,10 +64,9 @@ $result = $stmt->get_result();
 <header class="sidebar">
     <nav>
         <li><a href="dashboard.php">Dashboard</a></li>
-        <li><a href="add_friends.php">Add Friends</a></li>
-        <li><a href="user_friend.php">My Friends</a></li>
-        <li><a href="contact.php">Chat</a></li>
-        <li><a href="profile.php">Profile</a></li>
+        <li><a href="user_management.php">User Management</a></li>
+        <li><a href="admin_management.php">Admin Management</a></li>
+        <li><a href="post_management.php">Post Management</a></li>
         <li><a href="settings.php">Setting</a></li>
         <li><a href="logout.php">Logout</a></li>
     </nav>
