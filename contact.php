@@ -96,8 +96,9 @@ mysqli_close($conn);
             </div>
             <li><a href="dashboard.php">Dashboard</a></li>
             <li><a href="add_friends.php">Add Friends</a></li>
-            <li><a href="profile.php">Profile</a></li>
-            <li><a href="chat.php">Chat</a></li>
+            <li><a href="contact.php">chat</a></li>
+            <li><a href="profile.php">profile</a></li>
+            <li><a href="settings.php">Setting</a></li>
             <li><a href="logout.php">Logout</a></li>
         </nav>
     </header>

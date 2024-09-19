@@ -1,0 +1,100 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+header.sidebar {
+    background-color: #333;
+    width: 200px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: 20px 0;
+  }
+  
+  header.sidebar nav {
+    list-style-type: none;
+  }
+  
+  header.sidebar li {
+    margin: 20px 0;
+  }
+  
+  header.sidebar a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 18px;
+    display: block;
+    padding: 10px 20px;
+    transition: background 0.3s ease;
+  }
+  
+  header.sidebar a:hover {
+    background-color: #555;
+    border-radius: 5px;
+  }
+
+
+/* Form Styles */
+form {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.input-pass {
+    margin-bottom: 20px;
+}
+
+.input-pass input {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.button {
+    text-align: center;
+}
+
+.button button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.button button:hover {
+    background-color: #0056b3;
+}
+.logo {
+    text-align: center; /* Center the logo horizontally in its container */
+  }
+  
+  .logo img {
+    margin-right: 10px; /* Space between image and label */
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+  }
+  .error-message {
+    color: red;
+    margin-top: 10px;
+}
+
+.success-message {
+    color: green;
+    margin-top: 10px;
+}
