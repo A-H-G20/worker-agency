@@ -1,0 +1,150 @@
+/* Reset some default styling */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fc;
+    color: #333;
+}
+
+/* Sidebar styling */
+header.sidebar {
+    width: 250px;
+    height: 100vh;
+    background-color: #343a40;
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: 1rem;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+header.sidebar nav {
+    list-style: none;
+    padding: 0;
+}
+
+header.sidebar nav li {
+    margin: 1rem 0;
+}
+
+header.sidebar nav li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.1rem;
+    display: block;
+    padding: 0.5rem;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+header.sidebar nav li a:hover {
+    background-color: #495057;
+}
+
+/* Main content area */
+.dash {
+    margin-left: 250px;
+    padding: 2rem;
+}
+
+/* Flex container for count boxes */
+.count-container {
+    display: flex;
+    justify-content: space-between; /* Distributes space evenly between boxes */
+    gap: 1rem; /* Adds space between the boxes */
+    margin-bottom: 2rem; /* Adds space below the count boxes */
+}
+
+/* Individual count boxes */
+/* Individual count boxes */
+.count-users,
+.count-post {
+    background: #fff;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    flex: 1; /* Ensures that each box takes equal space */
+    min-width: 0; /* Prevents flex items from overflowing */
+    text-decoration: none; /* Remove underline from link */
+    color: inherit; /* Inherit text color from parent */
+    display: block; /* Ensure the link takes the full box area */
+}
+.count-users,
+.count-post {
+    cursor: pointer; /* Change cursor to pointer to indicate it's clickable */
+}
+.count-users:hover,
+.count-post:hover {
+    background-color: #e9ecef; /* Add a hover effect if desired */
+}
+
+
+/* Chart container */
+.chart-container {
+    background: #fff;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem; /* Adds space below the chart */
+}
+
+/* Filters section */
+.filters {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.filters form {
+    background: #fff;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 500px; /* Adjust the max-width as needed */
+    width: 100%;
+    margin-left: 250px;
+}
+
+.filters h3 {
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    color: #333;
+    text-align: center; /* Center the heading text */
+}
+
+.filters label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+.filters input[type="date"] {
+    display: block;
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.filters button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: block;
+    width: 100%; /* Make button full-width */
+}
+
+.filters button:hover {
+    background-color: #0056b3;
+}
