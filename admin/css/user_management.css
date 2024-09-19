@@ -1,0 +1,89 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+/* Sidebar styling */
+header.sidebar {
+width: 250px;
+height: 100vh;
+background-color: #343a40;
+position: fixed;
+top: 0;
+left: 0;
+padding: 1rem;
+box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+header.sidebar nav {
+list-style: none;
+padding: 0;
+}
+
+header.sidebar nav li {
+margin: 1rem 0;
+}
+
+header.sidebar nav li a {
+color: #fff;
+text-decoration: none;
+font-size: 1.1rem;
+display: block;
+padding: 0.5rem;
+border-radius: 4px;
+transition: background-color 0.3s;
+}
+
+header.sidebar nav li a:hover {
+background-color: #495057;
+}
+main {
+    margin-left: 280px;
+    padding: 20px;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background-color: #ffffff;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+}
+th {
+    background-color: #007bff;
+    color: #ffffff;
+}
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+tr:hover {
+    background-color: #e9ecef;
+}
+.delete-btn {
+    color: #dc3545;
+    text-decoration: none;
+    font-weight: bold;
+}
+.delete-btn:hover {
+    text-decoration: underline;
+}
+.message, .error {
+    margin: 20px 0;
+    padding: 10px;
+    border-radius: 4px;
+    font-weight: bold;
+}
+.message {
+    color: #28a745;
+    background-color: #d4edda;
+}
+.error {
+    color: #dc3545;
+    background-color: #f8d7da;
+}
